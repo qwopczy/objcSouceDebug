@@ -254,7 +254,7 @@ method_list_t **method_array_t::endCategoryMethodLists(Class cls)
     // everything except the last method list.
     return mlistsEnd - 1;
 }
-
+//SEL和const char*的转换，都是直接进行强制类型转换的，所以二者是同一块内存。
 static const char *sel_cname(SEL sel)
 {
     return (const char *)(void *)sel;
@@ -280,7 +280,11 @@ void _objc_setClassCopyFixupHandler(void (* _Nonnull newFixupHandler)
     (Class _Nonnull oldClass, Class _Nonnull newClass)) {
     classCopyFixupHandler = newFixupHandler;
 }
+//函数创建类和元类
+/**
+ alloc函数内部本质上是通过calloc函数分配内存空间，没有做其他操作。然后就执行objc_initializeClassPair_internal函数，initialize函数内部都是初始化操作，用来初始化刚刚创建的Class和metaClass。
 
+ */
 static Class 
 alloc_class_for_subclass(Class supercls, size_t extraBytes)
 {
@@ -971,6 +975,7 @@ static NXMapTable *nonMetaClasses(void)
 * addNonMetaClass
 * Adds metacls => cls to the secondary metaclass map
 * Locking: runtimeLock must be held by the caller
+ 注册元类
 **********************************************************************/
 static void addNonMetaClass(Class cls)
 {
@@ -2172,7 +2177,7 @@ void _objc_flush_caches(Class cls)
 *
 * Locking: write-locks runtimeLock
 **********************************************************************/
-// 加载所有image
+// 加载所有image map_images函数是初始化的关键，内部完成了大量Runtime环境的初始化操作。
 void
 map_images(unsigned count, const char * const paths[],
            const struct mach_header * const mhdrs[])
@@ -2185,7 +2190,8 @@ map_images(unsigned count, const char * const paths[],
 /***********************************************************************
 * load_images
 * Process +load in the given images which are being mapped in by dyld.
-*
+* load_images函数中主要做了两件事，首先通过prepare_load_methods函数准备Class load list和Category load list，然后通过call_load_methods函数调用已经准备好的两个方法列表。
+
 * Locking: write-locks runtimeLock and loadMethodLock
 **********************************************************************/
 extern bool hasLoadMethods(const headerType *mhdr);
@@ -2473,7 +2479,19 @@ readProtocol(protocol_t *newproto, Class protocol_class,
 * Called by: map_images_nolock
 *
 * Locking: runtimeLock acquired by map_images
+ 加载所有类到类的gdb_objc_realized_classes表中。
+ 对所有类做重映射。
+ 将所有SEL都注册到namedSelectors表中。
+ 修复函数指针遗留。
+ 将所有Protocol都添加到protocol_map表中。
+ 对所有Protocol做重映射。
+ 初始化所有非懒加载的类，进行rw、ro等操作。
+ 遍历已标记的懒加载的类，并做初始化操作。
+ 处理所有Category，包括Class和Meta Class。
+ 初始化所有未初始化的类。
+
 **********************************************************************/
+//大量的初始化操作
 void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int unoptimizedTotalClasses)
 {
     header_info *hi;
@@ -3815,6 +3833,7 @@ protocol_copyProtocolList(Protocol *p, unsigned int *outCount)
 * objc_registerProtocol() is called.
 * Returns nil if a protocol with the same name already exists.
 * Locking: acquires runtimeLock
+ Protocol是可以在运行时动态创建添加的，和创建Class的过程类似，分为创建和注册两部分
  // 创建新的Protocol，创建后还需要调用下面的register方法
 **********************************************************************/
 Protocol *
@@ -4778,7 +4797,9 @@ static method_t *findMethodInSortedMethodList(SEL key, const method_list_t *list
 * getMethodNoSuper_nolock
 * fixme
 * Locking: runtimeLock must be read- or write-locked by the caller
+ 当调用一个对象的方法时，查找对象的方法，本质上就是遍历对象isa所指向类的方法列表，并用调用方法的SEL和遍历的method_t结构体的name字段做对比，如果相等则将IMP函数指针返回。
 **********************************************************************/
+// 根据传入的SEL，查找对应的method_t结构体
 static method_t *search_method_list(const method_list_t *mlist, SEL sel)
 {
     int methodListIsFixedUp = mlist->isFixedUp();
@@ -4789,6 +4810,7 @@ static method_t *search_method_list(const method_list_t *mlist, SEL sel)
     } else {
         // Linear search of unsorted method list
         for (auto& meth : *mlist) {
+            // SEL本质上就是字符串，查找的过程就是进行字符串对比
             if (meth.name == sel) return &meth;
         }
     }
@@ -4816,11 +4838,13 @@ getMethodNoSuper_nolock(Class cls, SEL sel)
     // fixme nil cls? 
     // fixme nil sel?
 
+    // 根据for循环，从methodList列表中，从头开始遍历，每次遍历后向后移动一位地址。
     for (auto mlists = cls->data()->methods.beginLists(), 
               end = cls->data()->methods.endLists(); 
          mlists != end;
          ++mlists)
     {
+         // 对sel参数和method_t做匹配，如果匹配上则返回。
         method_t *m = search_method_list(*mlists, sel);
         if (m) return m;
     }
@@ -4937,8 +4961,13 @@ IMP _class_lookupMethodAndLoadCache3(id obj, SEL sel, Class cls)
 * May return _objc_msgForward_impcache. IMPs destined for external use 
 *   must be converted to _objc_msgForward or _objc_msgForward_stret.
 *   If you don't want forwarding at all, use lookUpImpOrNil() instead.
+ 
+ 1刚调用objc_msgSend函数后，汇编函数 内部的一些处理逻辑。
+ 2复杂的查找IMP的过程，会涉及到cache list和method list等。
+ 3进入消息转发阶段。
 **********************************************************************/
-IMP lookUpImpOrForward(Class cls, SEL sel, id inst, 
+// 执行查找imp和转发的代码
+IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
                        bool initialize, bool cache, bool resolver)
 {
     IMP imp = nil;
@@ -4946,6 +4975,7 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
 
     runtimeLock.assertUnlocked();
 
+    // 如果cache是YES，则从缓存中查找IMP。如果是从cache3函数进来，则不会执行cache_getImp()函数
     // Optimistic cache lookup
     if (cache) {
         imp = cache_getImp(cls, sel);
@@ -4964,10 +4994,15 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
     runtimeLock.lock();
     checkIsKnownClass(cls);
 
+    // 判断类是否已经被创建，如果没有被创建，则将类实例化
     if (!cls->isRealized()) {
+        // 对类进行实例化操作
         realizeClass(cls);
     }
 
+    //在向对象发送消息时，lookUpImpOrForward函数中会判断当前类是否被初始化，如果没有被初始化，则先进行初始化再调用类的方法
+    
+    //第一次调用当前类的话，执行initialize的代码
     if (initialize  &&  !cls->isInitialized()) {
         runtimeLock.unlock();
         _class_initialize (_class_getNonMetaClass(cls, inst));
@@ -4983,14 +5018,16 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
     runtimeLock.assertLocked();
 
     // Try this class's cache.
-
+    // 尝试获取这个类的缓存
     imp = cache_getImp(cls, sel);
     if (imp) goto done;
 
     // Try this class's method lists.
     {
+        // 如果没有从cache中查找到，则从方法列表中获取Method
         Method meth = getMethodNoSuper_nolock(cls, sel);
         if (meth) {
+            // 如果获取到对应的Method，则加入缓存并从Method获取IMP
             log_and_fill_cache(cls, meth->imp, sel, inst, cls);
             imp = meth->imp;
             goto done;
@@ -5000,6 +5037,8 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
     // Try superclass caches and method lists.
     {
         unsigned attempts = unreasonableClassCount();
+        
+        // 循环获取这个类的缓存IMP 或 方法列表的IMP
         for (Class curClass = cls->superclass;
              curClass != nil;
              curClass = curClass->superclass)
@@ -5010,10 +5049,12 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
             }
             
             // Superclass cache.
+            // 获取父类缓存的IMP
             imp = cache_getImp(curClass, sel);
             if (imp) {
                 if (imp != (IMP)_objc_msgForward_impcache) {
                     // Found the method in a superclass. Cache it in this class.
+                    // 如果发现父类的方法，并且不再缓存中，在下面的函数中缓存方法
                     log_and_fill_cache(cls, imp, sel, inst, curClass);
                     goto done;
                 }
@@ -5025,6 +5066,7 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
                 }
             }
             
+            // 在父类的方法列表中，获取method_t对象。如果找到则缓存查找到的IMP
             // Superclass method list.
             Method meth = getMethodNoSuper_nolock(curClass, sel);
             if (meth) {
@@ -5037,19 +5079,21 @@ IMP lookUpImpOrForward(Class cls, SEL sel, id inst,
 
     // No implementation found. Try method resolver once.
 
-    if (resolver  &&  !triedResolver) {
+    // 如果没有找到，则尝试动态方法解析
+    if (resolver  &&  !triedResolver) {//判断传入的resolver参数是否为YES，并且会判断是否已经有过动态决议，
         runtimeLock.unlock();
         _class_resolveMethod(cls, sel, inst);
         runtimeLock.lock();
         // Don't cache the result; we don't hold the lock so it may have 
         // changed already. Re-do the search from scratch instead.
         triedResolver = YES;
-        goto retry;
+        goto retry;//goto retry，所以这段代码可能会执行多次
     }
 
     // No implementation found, and method resolver didn't help. 
     // Use forwarding.
 
+    // 如果没有IMP被发现，并且动态方法解析也没有处理，则进入消息转发阶段
     imp = (IMP)_objc_msgForward_impcache;
     cache_fill(cls, sel, imp, inst);
 
@@ -5766,6 +5810,8 @@ BOOL class_conformsToProtocol(Class cls, Protocol *proto_gen)
 * addMethod
 * fixme
 * Locking: runtimeLock must be held by the caller
+ addMethod函数中会先判断需要添加的方法是否存在，如果已经存在则直接返回对应的IMP，
+ 否则就动态添加一个方法
 **********************************************************************/
 static IMP 
 addMethod(Class cls, SEL name, IMP imp, const char *types, bool replace)
@@ -5784,10 +5830,10 @@ addMethod(Class cls, SEL name, IMP imp, const char *types, bool replace)
         // already exists
         if (!replace) {
             result = m->imp;
-        } else {
+        } else {//替换方法原有实现。
             result = _method_setImplementation(cls, m, imp);
         }
-    } else {
+    } else {//添加的方法不存在，则创建一个method_list_t结构体指针
         // fixme optimize
         method_list_t *newlist;
         newlist = (method_list_t *)calloc(sizeof(*newlist), 1);
@@ -6197,6 +6243,7 @@ objc_duplicateClass(Class original, const char *name,
 /***********************************************************************
 * objc_initializeClassPair
 * Locking: runtimeLock must be write-locked by the caller
+ 初始化操作，用来初始化刚刚创建的Class和metaClass
 **********************************************************************/
 
 // &UnsetLayout is the default ivar layout during class construction
@@ -6320,6 +6367,7 @@ Class objc_initializeClassPair(Class superclass, const char *name, Class cls, Cl
 * objc_allocateClassPair
 * fixme
 * Locking: acquires runtimeLock
+ 编译时只读结构体class_ro_t就会被确定，在运行时是不可更改的。ro结构体中有一个字段是instanceSize，表示当前类在创建对象时需要多少空间，后面的创建都根据这个size分配类的内存。 如果强行加 ivar  访问就会导致地址越界 所以不能加 ivar
 **********************************************************************/
 Class objc_allocateClassPair(Class superclass, const char *name, 
                              size_t extraBytes)
@@ -6328,6 +6376,7 @@ Class objc_allocateClassPair(Class superclass, const char *name,
 
     mutex_locker_t lock(runtimeLock);
 
+    //创建时通过getClass函数判断类名是否已用，然后通过verifySuperclass函数判断superclass是否合适，如果任意条件不符合则创建类失败。
     // Fail if the class name is in use.
     // Fail if the superclass isn't kosher.
     if (getClass(name)  ||  !verifySuperclass(superclass, true/*rootOK*/)) {
@@ -6349,6 +6398,7 @@ Class objc_allocateClassPair(Class superclass, const char *name,
 * objc_registerClassPair
 * fixme
 * Locking: acquires runtimeLock
+ 和创建新类一样，注册新类也分为注册类和注册元类。通过下面的addNonMetaClass函数注册元类，通过直接调用NXMapInsert函数注册类。
 **********************************************************************/
 void objc_registerClassPair(Class cls)
 {
@@ -6630,7 +6680,7 @@ _class_createInstanceFromZone(Class cls, size_t extraBytes, void *zone,
 
     return obj;
 }
-
+//在创建对象的地方有两种方式，一种是通过calloc开辟内存，然后通过initInstanceIsa函数初始化这块内存。 第二种是直接调用class_createInstance函数，由内部实现初始化逻辑
 
 id 
 class_createInstance(Class cls, size_t extraBytes)
@@ -6732,6 +6782,9 @@ object_copyFromZone(id oldObj, size_t extraBytes, void *zone)
 * Removes associative references.
 * Returns `obj`. Does nothing if `obj` is nil.
  // dealloc方法的核心实现，内部会做判断和析构操作
+ 对当前对象进行析构，会调用析构函数.cxx_destruct函数，在函数内部还会进行对应的release操作。
+ 移除当前对象的所有关联关系。
+ 进行最后的clear操作。
 **********************************************************************/
 void *objc_destructInstance(id obj) 
 {
@@ -6758,6 +6811,7 @@ void *objc_destructInstance(id obj)
 * object_dispose
 * fixme
 * Locking: none
+ 
 **********************************************************************/
 id 
 object_dispose(id obj)

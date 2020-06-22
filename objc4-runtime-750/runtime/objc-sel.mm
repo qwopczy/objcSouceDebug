@@ -133,7 +133,9 @@ static SEL search_builtins(const char *name)
     return nil;
 }
 
-
+/**
+ SEL的哈希表也是将字符串注册到哈希表中，并不是之前的objc_selector结构体，所以可以看出现在SEL就是单纯的const char*常量字符串。
+ */
 static SEL __sel_registerName(const char *name, bool shouldLock, bool copy) 
 {
     SEL result = 0;

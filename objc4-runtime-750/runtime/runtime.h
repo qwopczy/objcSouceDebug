@@ -39,7 +39,7 @@
 /* Types */
 
 #if !OBJC_TYPES_DEFINED
-
+// 声明常用变量
 /// An opaque type that represents a method in a class definition.
 typedef struct objc_method *Method;
 

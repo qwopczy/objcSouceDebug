@@ -309,18 +309,26 @@ static void _NXMapRehash(NXMapTable *table) {
 	_objc_inform("*** maptable: count differs after rehashing; probably indicates a broken invariant: there are x and y such as isEqual(x, y) is TRUE but hash(x) != hash (y)\n");
     freeBuckets(pairs);
 }
+/**
+ 无论是注册类还是注册元类，内部都是通过NXMapInsert函数实现的。在Runtime中，所有类都是存在一个哈希表中的，在table的buckets中存储。每次新创建类之后，都需要把该类加入到哈希表中
 
+ */
 void *NXMapInsert(NXMapTable *table, const void *key, const void *value) {
     MapPair	*pairs = (MapPair *)table->buckets;
+    // 计算key在当前hash表中的下标，hash下标不一定是最后
     unsigned	index = bucketOf(table, key);
+    // 找到buckets的首地址，并通过index下标计算对应位置，获取到index对应的MapPair
     MapPair	*pair = pairs + index;
+    
+    // 如果key为空，则返回
     if (key == NX_MAPNOTAKEY) {
 	_objc_inform("*** NXMapInsert: invalid key: -1\n");
 	return NULL;
     }
 
     unsigned numBuckets = table->nbBucketsMinusOne + 1;
-
+    
+    // 如果当前地址未冲突，则直接对pair赋值
     if (pair->key == NX_MAPNOTAKEY) {
 	pair->key = key; pair->value = value;
 	table->count++;
@@ -328,24 +336,35 @@ void *NXMapInsert(NXMapTable *table, const void *key, const void *value) {
 	return NULL;
     }
     
+     /* 到这一步，则表示hash表冲突了 */
+    
+     // 如果同名，则将旧类换为新类
     if (isEqual(table, pair->key, key)) {
 	const void	*old = pair->value;
 	if (old != value) pair->value = value;/* avoid writing unless needed! */
 	return (void *)old;
     } else if (table->count == numBuckets) {
+        // hash表满了，对hash表做重哈希，然后再次执行这个函数
 	/* no room: rehash and retry */
 	_NXMapRehash(table);
 	return NXMapInsert(table, key, value);
     } else {
+        // hash表冲突了
 	unsigned	index2 = index;
+        
+    // 解决hash表冲突，这里采用的是线性探测法，解决哈希表冲突
 	while ((index2 = nextIndex(table, index2)) != index) {
 	    pair = pairs + index2;
 	    if (pair->key == NX_MAPNOTAKEY) {
 		pair->key = key; pair->value = value;
 		table->count++;
+            
+            // 在查找过程中，发现哈希表不够用了，则进行重哈希 扩容
 		if (table->count * 4 > numBuckets * 3) _NXMapRehash(table);
 		return NULL;
 	    }
+        
+        // 找到同名类，则用新类替换旧类，并返回
 	    if (isEqual(table, pair->key, key)) {
 		const void	*old = pair->value;
 		if (old != value) pair->value = value;/* avoid writing unless needed! */

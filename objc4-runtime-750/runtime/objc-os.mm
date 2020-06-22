@@ -436,6 +436,7 @@ static bool shouldRejectGCImage(const headerType *mhdr)
 #include "objc-file-old.h"
 #endif
 
+//map_images_nolock 内部核心就是_read_images函数。
 void 
 map_images_nolock(unsigned mhCount, const char * const mhPaths[],
                   const struct mach_header * const mhdrs[])
@@ -870,6 +871,19 @@ void _objc_atfork_child()
 * _objc_init
 * Bootstrap initialization. Registers our image notifier with dyld.
 * Called by libSystem BEFORE library initialization time
+ 
+ 大概流程就像下面列出的步骤，其中第3、4、5步会执行多次，在ImageLoader加载新的image进内存后就会执行一次。
+ 1在引用程序启动后，由dyld将应用程序加载到二进制中，并完成一些文件的初始化操作。
+ 2Runtime向dyld中注册回调函数。
+ 3通过ImageLoader将所有image加载到内存中。
+ 4dyld在image发生改变时，主动调用回调函数。
+ 5Runtime接收到dyld的函数回调，开始执行map_images、load_images等操作，并回调+load方法。
+ 6调用main()函数，开始执行业务代码。
+
+ ImageLoader是image的加载器，image可以理解为编译后的二进制。
+ map_images 调用是由dyld发起的，由ImageLoader通知dyld进行调用。
+ 
+ 在Runtime加载时，会调用_objc_init函数，并在内部注册三个函数指针。其中map_images函数是初始化的关键，内部完成了大量Runtime环境的初始化操作。
 **********************************************************************/
 // runtime加载入口=====
 void _objc_init(void)
@@ -884,7 +898,7 @@ void _objc_init(void)
     static_init();
     lock_init();
     exception_init();
-
+//dyld中注册回调函数
     _dyld_objc_notify_register(&map_images, load_images, unmap_image);
 }
 

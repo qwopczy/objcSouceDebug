@@ -431,15 +431,17 @@ Ivar object_getInstanceVariable(id obj, const char *name, void **value)
 *   dtor method (if any) followed by superclasses' dtors (if any), 
 *   stopping at cls's dtor (if any).
 * Uses methodListLock and cacheUpdateLock. The caller must hold neither.
+ 调用C++的析构函数
 **********************************************************************/
 static void object_cxxDestructFromClass(id obj, Class cls)
 {
     void (*dtor)(id);
 
     // Call cls's dtor first, then superclasses's dtors.
-
+    // 从当前类开始遍历，直到遍历到根类
     for ( ; cls; cls = cls->superclass) {
-        if (!cls->hasCxxDtor()) return; 
+        if (!cls->hasCxxDtor()) return;
+        // SEL_cxx_destruct就是.cxx_destruct的selector
         dtor = (void(*)(id))
             lookupMethodInClassAndLoadCache(cls, SEL_cxx_destruct);
         if (dtor != (void(*)(id))_objc_msgForward_impcache) {
@@ -447,6 +449,7 @@ static void object_cxxDestructFromClass(id obj, Class cls)
                 _objc_inform("CXX: calling C++ destructors for class %s", 
                              cls->nameForLogging());
             }
+            // 获取到.cxx_destruct的函数指针并调用
             (*dtor)(obj);
         }
     }
@@ -656,16 +659,17 @@ static void _class_resolveInstanceMethod(Class cls, SEL sel, id inst)
 * Call +resolveClassMethod or +resolveInstanceMethod.
 * Returns nothing; any result would be potentially out-of-date already.
 * Does not check if the method already exists.
+ 如果满足条件并且是第一次进行动态方法决议
 **********************************************************************/
 void _class_resolveMethod(Class cls, SEL sel, id inst)
 {
     if (! cls->isMetaClass()) {
-        // try [cls resolveInstanceMethod:sel]
+        // try [cls resolveInstanceMethod:sel] 实例方法决议
         _class_resolveInstanceMethod(cls, sel, inst);
     } 
     else {
         // try [nonMetaClass resolveClassMethod:sel]
-        // and [cls resolveInstanceMethod:sel]
+        // and [cls resolveInstanceMethod:sel] 类方法决议
         _class_resolveClassMethod(cls, sel, inst);
         if (!lookUpImpOrNil(cls, sel, inst, 
                             NO/*initialize*/, YES/*cache*/, NO/*resolver*/)) 

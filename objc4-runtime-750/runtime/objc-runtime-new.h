@@ -221,7 +221,7 @@ struct entsize_list_tt {
 
 struct method_t {
     SEL name;
-    const char *types;
+    const char *types;//types字段就是返回值和参数的编码。编码后的字符串类似于"iv@:d"
     MethodListIMP imp;
 
     struct SortBySELAddress :
@@ -293,6 +293,7 @@ typedef uintptr_t protocol_ref_t;  // protocol_t *, but unremapped
 
 #define PROTOCOL_FIXED_UP_MASK (PROTOCOL_FIXED_UP_1 | PROTOCOL_FIXED_UP_2)
 
+//继承objc_object 具备了对象的特征，那也是有isa指针的 Protocol中所有的isa都指向同一个类Protocol
 struct protocol_t : objc_object {
     const char *mangledName;
     struct protocol_list_t *protocols;
@@ -718,6 +719,7 @@ class list_array_tt {
     }
 
     void attachLists(List* const * addedLists, uint32_t addedCount) {
+        //通过对原有地址做位移，并将新创建的method_list_t结构体copy到方法列表中
         if (addedCount == 0) return;
 
         if (hasArray()) {

@@ -76,15 +76,15 @@
 #   define ISA_MAGIC_MASK  0x001f800000000001ULL
 #   define ISA_MAGIC_VALUE 0x001d800000000001ULL
 #   define ISA_BITFIELD                                                        \
-      uintptr_t nonpointer        : 1;                                         \
-      uintptr_t has_assoc         : 1;                                         \
-      uintptr_t has_cxx_dtor      : 1;                                         \
-      uintptr_t shiftcls          : 44; /*MACH_VM_MAX_ADDRESS 0x7fffffe00000*/ \
-      uintptr_t magic             : 6;                                         \
-      uintptr_t weakly_referenced : 1;                                         \
-      uintptr_t deallocating      : 1;                                         \
-      uintptr_t has_sidetable_rc  : 1;                                         \
-      uintptr_t extra_rc          : 8
+      uintptr_t nonpointer        : 1;  /* 是32位还是64位*/                                       \
+      uintptr_t has_assoc         : 1;  /* 对象是否含有或曾经含有关联引用，如果没有关联引用，可以更快的释放对象*/                                       \
+      uintptr_t has_cxx_dtor      : 1;  /* 表示是否有C++析构函数或OC的析构函数*/                                       \
+      uintptr_t shiftcls          : 44; /*MACH_VM_MAX_ADDRESS 0x7fffffe00000 对象指向类的内存地址，也就是isa指向的地址*/ \
+      uintptr_t magic             : 6;  /* 对象是否初始化完成 */                                      \
+      uintptr_t weakly_referenced : 1;  /* 对象是否被弱引用或曾经被弱引用*/                                       \
+      uintptr_t deallocating      : 1;  /* 对象是否被释放中 */                                       \
+      uintptr_t has_sidetable_rc  : 1;  /* 对象引用计数太大，是否超出存储区域 */                                       \
+      uintptr_t extra_rc          : 8   /* 对象引用计数*/
 #   define RC_ONE   (1ULL<<56)
 #   define RC_HALF  (1ULL<<7)
 

@@ -192,7 +192,7 @@ objc_object::initProtocolIsa(Class cls)
 {
     return initClassIsa(cls);
 }
-
+//创建对象 初始化这块内存
 inline void 
 objc_object::initInstanceIsa(Class cls, bool hasCxxDtor)
 {
@@ -424,7 +424,7 @@ objc_object::rootDealloc()
                  !isa.has_sidetable_rc))
     {
         assert(!sidetable_present());
-        free(this);
+        free(this);//if语句表示当前对象没有实例变量，则直接将当前对象free
     } 
     else {
         object_dispose((id)this);

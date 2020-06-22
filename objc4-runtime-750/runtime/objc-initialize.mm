@@ -271,6 +271,7 @@ static NXMapTable *pendingInitializeMap;
 * cls has completed its +initialize method, and so has its superclass.
 * Mark cls as initialized as well, then mark any of cls's subclasses 
 * that have already finished their own +initialize methods.
+ 核心工作都由setInitialized函数完成
 **********************************************************************/
 static void _finishInitializing(Class cls, Class supercls)
 {
@@ -401,6 +402,8 @@ static bool classHasTrivialInitialize(Class cls)
 *   the info bits and notify waiting threads.
 * If not, update them later. (This can happen if this +initialize 
 *   was itself triggered from inside a superclass +initialize.)
+ 
+ 内部会调用_finishInitializing函数，在函数内部会调用class的setInitialized函数，核心工作都由setInitialized函数完成。
 **********************************************************************/
 static void lockAndFinishInitializing(Class cls, Class supercls)
 {
@@ -480,7 +483,11 @@ void performForkChildInitialize(Class cls, Class supercls)
 /***********************************************************************
 * class_initialize.  Send the '+initialize' message on demand to any
 * uninitialized class. Force initialization of superclasses first.
+ initialize和load方法的调用顺序一样，会按照继承者链先初始化父类。
+ 不太一样的地方，Category中定义的initialize方法会覆盖原方法而不是像load方法一样都可以调用。
+ _class_initialize函数中关键的两行代码是callInitialize和lockAndFinishInitializing的调用
 **********************************************************************/
+// 第一次调用类的方法，初始化类对象
 void _class_initialize(Class cls)
 {
     assert(!cls->isMetaClass());
@@ -490,6 +497,7 @@ void _class_initialize(Class cls)
 
     // Make sure super is done initializing BEFORE beginning to initialize cls.
     // See note about deadlock above.
+    // 递归初始化父类。initizlize不用显式的调用super，因为runtime已经在内部调用了
     supercls = cls->superclass;
     if (supercls  &&  !supercls->isInitialized()) {
         _class_initialize(supercls);
@@ -534,6 +542,7 @@ void _class_initialize(Class cls)
         @try
 #endif
         {
+            // 通过objc_msgSend()函数调用initialize方法
             callInitialize(cls);
 
             if (PrintInitializing) {
@@ -553,6 +562,7 @@ void _class_initialize(Class cls)
         @finally
 #endif
         {
+            // 执行initialize方法后，进行系统的initialize过程
             // Done initializing.
             lockAndFinishInitializing(cls, supercls);
         }

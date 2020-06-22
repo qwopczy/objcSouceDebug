@@ -1737,6 +1737,8 @@ callAlloc(Class cls, bool checkNil, bool allocWithZone=false)
         // No alloc/allocWithZone implementation. Go straight to the allocator.
         // fixme store hasCustomAWZ in the non-meta class and 
         // add it to canAllocFast's summary
+        //在创建对象的地方有两种方式，一种是通过calloc开辟内存，然后通过initInstanceIsa函数初始化这块内存。第二种是直接调用class_createInstance函数，由内部实现初始化逻辑。
+
         if (fastpath(cls->canAllocFast())) {
             // No ctors, raw isa, etc. Go straight to the metal.
             bool dtor = cls->hasCxxDtor();
@@ -1745,7 +1747,7 @@ callAlloc(Class cls, bool checkNil, bool allocWithZone=false)
             obj->initInstanceIsa(cls, dtor);
             return obj;
         }
-        else {
+        else {//初始化代码最终会调用到_class_createInstanceFromZone函数，这个函数是初始化的关键代码。
             // Has ctor or raw isa or something. Use the slower path.
             id obj = class_createInstance(cls, 0);
             if (slowpath(!obj)) return callBadAllocHandler(cls);

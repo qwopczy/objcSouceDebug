@@ -126,8 +126,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6328"
-            endingLineNumber = "6328"
+            startingLineNumber = "6376"
+            endingLineNumber = "6376"
             landmarkName = "objc_allocateClassPair(superclass, name, extraBytes)"
             landmarkType = "9">
          </BreakpointContent>
@@ -270,8 +270,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3132"
-            endingLineNumber = "3132"
+            startingLineNumber = "3150"
+            endingLineNumber = "3150"
             landmarkName = "method_exchangeImplementations(m1, m2)"
             landmarkType = "9">
          </BreakpointContent>
@@ -334,8 +334,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2937"
-            endingLineNumber = "2937"
+            startingLineNumber = "2955"
+            endingLineNumber = "2955"
             landmarkName = "prepare_load_methods(mhdr)"
             landmarkType = "9">
          </BreakpointContent>
@@ -350,8 +350,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2561"
-            endingLineNumber = "2561"
+            startingLineNumber = "2579"
+            endingLineNumber = "2579"
             landmarkName = "_read_images(hList, hCount, totalClasses, unoptimizedTotalClasses)"
             landmarkType = "9">
          </BreakpointContent>
@@ -366,8 +366,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2751"
-            endingLineNumber = "2751"
+            startingLineNumber = "2769"
+            endingLineNumber = "2769"
             landmarkName = "_read_images(hList, hCount, totalClasses, unoptimizedTotalClasses)"
             landmarkType = "9">
          </BreakpointContent>
@@ -382,8 +382,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3821"
-            endingLineNumber = "3821"
+            startingLineNumber = "3840"
+            endingLineNumber = "3840"
             landmarkName = "objc_allocateProtocol(name)"
             landmarkType = "9">
          </BreakpointContent>
@@ -398,8 +398,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5166"
-            endingLineNumber = "5166"
+            startingLineNumber = "5210"
+            endingLineNumber = "5210"
             landmarkName = "objc_class::setInitialized()"
             landmarkType = "7">
          </BreakpointContent>
@@ -414,10 +414,480 @@
             filePath = "runtime/objc-os.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "876"
-            endingLineNumber = "876"
+            startingLineNumber = "890"
+            endingLineNumber = "890"
             landmarkName = "_objc_init()"
             landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1A4EEDEF-C8F6-4CFF-819D-719EFAC2E56D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/objc-initialize.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "492"
+            endingLineNumber = "492"
+            landmarkName = "_class_initialize(cls)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C288BB5F-B140-4904-8614-288D4A29B898"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2300"
+            endingLineNumber = "2300"
+            landmarkName = "+alloc"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F677B8F6-5941-4841-8C5D-D40A27668592"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1733"
+            endingLineNumber = "1733"
+            landmarkName = "callAlloc(cls, checkNil)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "F677B8F6-5941-4841-8C5D-D40A27668592 - d246be5e02b93592"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_objc_rootAlloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1733"
+                  endingLineNumber = "1733"
+                  offsetFromSymbolStart = "30">
+               </Location>
+               <Location
+                  uuid = "F677B8F6-5941-4841-8C5D-D40A27668592 - 11486c7f87fbe19a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_alloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1733"
+                  endingLineNumber = "1733"
+                  offsetFromSymbolStart = "30">
+               </Location>
+               <Location
+                  uuid = "F677B8F6-5941-4841-8C5D-D40A27668592 - da090e36088291da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_allocWithZone"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1733"
+                  endingLineNumber = "1733"
+                  offsetFromSymbolStart = "30">
+               </Location>
+               <Location
+                  uuid = "F677B8F6-5941-4841-8C5D-D40A27668592 - e937512277147cdc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[NSObject new]"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1733"
+                  endingLineNumber = "1733"
+                  offsetFromSymbolStart = "34">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7FCC989B-5B4A-4A78-A61F-0F4F655A8704"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1752"
+            endingLineNumber = "1752"
+            landmarkName = "callAlloc(cls, checkNil)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "7FCC989B-5B4A-4A78-A61F-0F4F655A8704 - d246be5e02b93592"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_objc_rootAlloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "283">
+               </Location>
+               <Location
+                  uuid = "7FCC989B-5B4A-4A78-A61F-0F4F655A8704 - 11486c7f87fbe19a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_alloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "283">
+               </Location>
+               <Location
+                  uuid = "7FCC989B-5B4A-4A78-A61F-0F4F655A8704 - da090e36088291da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_allocWithZone"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "283">
+               </Location>
+               <Location
+                  uuid = "7FCC989B-5B4A-4A78-A61F-0F4F655A8704 - e937512277147cdc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[NSObject new]"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "287">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E6A34BA0-A181-41D9-9AAF-A3E60AEBF5D5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1742"
+            endingLineNumber = "1742"
+            landmarkName = "callAlloc(cls, checkNil)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "E6A34BA0-A181-41D9-9AAF-A3E60AEBF5D5 - d246be5e02b93592"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_objc_rootAlloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1742"
+                  endingLineNumber = "1742"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "E6A34BA0-A181-41D9-9AAF-A3E60AEBF5D5 - 11486c7f87fbe19a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_alloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1742"
+                  endingLineNumber = "1742"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "E6A34BA0-A181-41D9-9AAF-A3E60AEBF5D5 - da090e36088291da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_allocWithZone"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1742"
+                  endingLineNumber = "1742"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "E6A34BA0-A181-41D9-9AAF-A3E60AEBF5D5 - e937512277147cdc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[NSObject new]"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1742"
+                  endingLineNumber = "1742"
+                  offsetFromSymbolStart = "124">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8284C2E1-E74E-4E64-A097-D26C9B9233D7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1750"
+            endingLineNumber = "1750"
+            landmarkName = "callAlloc(cls, checkNil)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "8284C2E1-E74E-4E64-A097-D26C9B9233D7 - d246be5e02b93592"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_objc_rootAlloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "283">
+               </Location>
+               <Location
+                  uuid = "8284C2E1-E74E-4E64-A097-D26C9B9233D7 - 11486c7f87fbe19a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_alloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "283">
+               </Location>
+               <Location
+                  uuid = "8284C2E1-E74E-4E64-A097-D26C9B9233D7 - da090e36088291da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_allocWithZone"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "283">
+               </Location>
+               <Location
+                  uuid = "8284C2E1-E74E-4E64-A097-D26C9B9233D7 - e937512277147cdc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[NSObject new]"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1752"
+                  endingLineNumber = "1752"
+                  offsetFromSymbolStart = "287">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6EEC65E1-E719-4840-8C42-129650F85EB9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1736"
+            endingLineNumber = "1736"
+            landmarkName = "callAlloc(cls, checkNil)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "6EEC65E1-E719-4840-8C42-129650F85EB9 - d246be5e02b93592"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_objc_rootAlloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1736"
+                  endingLineNumber = "1736"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "6EEC65E1-E719-4840-8C42-129650F85EB9 - 11486c7f87fbe19a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_alloc"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1736"
+                  endingLineNumber = "1736"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "6EEC65E1-E719-4840-8C42-129650F85EB9 - da090e36088291da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "objc_allocWithZone"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1736"
+                  endingLineNumber = "1736"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "6EEC65E1-E719-4840-8C42-129650F85EB9 - e937512277147cdc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[NSObject new]"
+                  moduleName = "libobjc.A.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/NSObject.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1736"
+                  endingLineNumber = "1736"
+                  offsetFromSymbolStart = "89">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "69DB0154-8CB6-4C7E-A117-95F7B11B3FBD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/objc-object.h"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "objc_object::initIsa(cls)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "80FBDC99-DD2E-4810-ABC7-C66A88E87500"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/objc-object.h"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "objc_object::initIsa(cls, nonpointer, hasCxxDtor)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "082C6A9B-52A2-4AAE-948B-DFC73D9FA1B0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/objc-object.h"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
+            landmarkName = "objc_object::initInstanceIsa(cls, hasCxxDtor)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
