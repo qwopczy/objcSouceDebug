@@ -247,6 +247,7 @@ id _object_get_associative_reference(id object, void *key) {
 }
 
 static id acquireValue(id value, uintptr_t policy) {
+    // 遇见不合法policy或者assign直接返回，也就是说将其他无效policy当做assign处理
     switch (policy & 0xFF) {
     case OBJC_ASSOCIATION_SETTER_RETAIN:
         return objc_retain(value);
@@ -270,26 +271,40 @@ struct ReleaseValue {
 
 void _object_set_associative_reference(id object, void *key, id value, uintptr_t policy) {
     // retain the new value (if any) outside the lock.
+    // 创建一个ObjcAssociation对象
     ObjcAssociation old_association(0, nil);
+    
+    // 通过policy为value创建对应属性，如果policy不存在，则默认为assign
     id new_value = value ? acquireValue(value, policy) : nil;
     {
         AssociationsManager manager;
+        // 在manager取_map成员，其实是一个map类型的映射
         AssociationsHashMap &associations(manager.associations());
+        // 创建指针指向即将拥有成员的Class
+               // 至此该类已经包含这个关联对象
         disguised_ptr_t disguised_object = DISGUISE(object);
+        
+        // 以下是记录强引用类型成员的过程
         if (new_value) {
             // break any existing association.
+            // 在即将拥有成员的Class中查找是否已经存在改关联属性
             AssociationsHashMap::iterator i = associations.find(disguised_object);
             if (i != associations.end()) {
                 // secondary table exists
+                // 当存在时候，访问这个空间的map
                 ObjectAssociationMap *refs = i->second;
+                // 遍历其成员对应的key
                 ObjectAssociationMap::iterator j = refs->find(key);
                 if (j != refs->end()) {
+                    // 如果存在key，重新更改Key的指向到新关联属性
                     old_association = j->second;
                     j->second = ObjcAssociation(policy, new_value);
                 } else {
+                    // 否则以新的key创建一个关联
                     (*refs)[key] = ObjcAssociation(policy, new_value);
                 }
             } else {
+                // key不存在的时候，直接创建关联
                 // create the new association (first time).
                 ObjectAssociationMap *refs = new ObjectAssociationMap;
                 associations[disguised_object] = refs;
@@ -298,11 +313,16 @@ void _object_set_associative_reference(id object, void *key, id value, uintptr_t
             }
         } else {
             // setting the association to nil breaks the association.
+            // 这种情况是policy不存在或者为assign的时候
+            // 在即将拥有的Class中查找是否已经存在Class
+            // 其实这里的意思就是如果之前有这个关联对象，并且是非assign形的，直接erase
             AssociationsHashMap::iterator i = associations.find(disguised_object);
             if (i !=  associations.end()) {
+                // 如果有该类型成员检查是否有key
                 ObjectAssociationMap *refs = i->second;
                 ObjectAssociationMap::iterator j = refs->find(key);
                 if (j != refs->end()) {
+                    // 如果有key，记录旧对象，释放
                     old_association = j->second;
                     refs->erase(j);
                 }
@@ -310,6 +330,7 @@ void _object_set_associative_reference(id object, void *key, id value, uintptr_t
         }
     }
     // release the old value (outside of the lock).
+    // 如果存在旧对象，则将其释放
     if (old_association.hasValue()) ReleaseValue()(old_association);
 }
 
@@ -325,6 +346,10 @@ void _object_remove_assocations(id object) {
             // copy all of the associations that need to be removed.
             ObjectAssociationMap *refs = i->second;
             // 将所有的关联成员放到一个vector，然后统一清理
+/*
+ ObjcAssociationMap表中所有的ObjcAssociation对象都存到一个数组elements里面 然后调用associations.erase( )删除第二张表。最后再遍历elements数组，把ObjcAssociation对象依次释放。
+            
+ */
             for (ObjectAssociationMap::iterator j = refs->begin(), end = refs->end(); j != end; ++j) {
                 elements.push_back(j->second);
             }

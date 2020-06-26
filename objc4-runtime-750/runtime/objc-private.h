@@ -66,7 +66,7 @@ union isa_t {
     uintptr_t bits;
 #if defined(ISA_BITFIELD)
     struct {
-        ISA_BITFIELD;  // defined in isa.h
+        ISA_BITFIELD;  // defined in isa.h 
     };
 #endif
 };

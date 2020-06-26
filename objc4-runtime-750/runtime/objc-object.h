@@ -199,15 +199,18 @@ objc_object::initInstanceIsa(Class cls, bool hasCxxDtor)
     assert(!cls->instancesRequireRawIsa());
     assert(hasCxxDtor == cls->hasCxxDtor());
 
+    // initIsa 入口函数
+    // 传入 Class 对象，是否为 isa 优化量，
     initIsa(cls, true, hasCxxDtor);
 }
-
+//初始化的过程就是对isa_t结构体初始化的过程。
 inline void 
 objc_object::initIsa(Class cls, bool nonpointer, bool hasCxxDtor) 
 { 
     assert(!isTaggedPointer()); 
     
     if (!nonpointer) {
+        // 如果没有使用 isa 优化，其内部只记录地址信息
         isa.cls = cls;
     } else {
         assert(!DisableNonpointerIsa);
@@ -217,6 +220,9 @@ objc_object::initIsa(Class cls, bool nonpointer, bool hasCxxDtor)
 
 #if SUPPORT_INDEXED_ISA
         assert(cls->classArrayIndex() > 0);
+        
+        // ISA_MAGIC_VALUE 为 bits（isa 信息）赋初值
+        // 注意在 arm64 下 mask 部分固定为 0x1a
         newisa.bits = ISA_INDEX_MAGIC_VALUE;
         // isa.magic is part of ISA_MAGIC_VALUE
         // isa.nonpointer is part of ISA_MAGIC_VALUE
@@ -224,9 +230,14 @@ objc_object::initIsa(Class cls, bool nonpointer, bool hasCxxDtor)
         newisa.indexcls = (uintptr_t)cls->classArrayIndex();
 #else
         newisa.bits = ISA_MAGIC_VALUE;
+        // ISA_MAGIC_VALUE 为 bits（isa 信息）赋初值
+        // 注意在 arm64 下 mask 部分固定为 0x1a
+        
         // isa.magic is part of ISA_MAGIC_VALUE
         // isa.nonpointer is part of ISA_MAGIC_VALUE
         newisa.has_cxx_dtor = hasCxxDtor;
+        // 由于使用了 isa 优化，所以第三位拥有其他信息
+        // 需要将 cls 初始数据左移，保存在 shiftcls 对应位置
         newisa.shiftcls = (uintptr_t)cls >> 3;
 #endif
 
@@ -477,7 +488,12 @@ objc_object::rootRetain(bool tryRetain, bool handleOverflow)
 
     isa_t oldisa;
     isa_t newisa;
-
+/**
+ 使用 LoadExclusive 加载 isa 的值
+ 调用 addc(newisa.bits, RC_ONE, 0, &carry) 方法将 isa 的值加一
+ 调用 StoreExclusive(&isa.bits, oldisa.bits, newisa.bits) 更新 isa 的值
+ 返回当前对象
+ */
     do {
         transcribeToSideTable = false;
         oldisa = LoadExclusive(&isa.bits);
@@ -498,7 +514,7 @@ objc_object::rootRetain(bool tryRetain, bool handleOverflow)
         newisa.bits = addc(newisa.bits, RC_ONE, 0, &carry);  // extra_rc++
 
         if (slowpath(carry)) {
-            // newisa.extra_rc++ overflowed
+            // newisa.extra_rc++ overflowed 将 isa 结构体中的 extra_rc 的值加一
             if (!handleOverflow) {
                 ClearExclusive(&isa.bits);
                 return rootRetain_overflow(tryRetain);
@@ -559,6 +575,17 @@ objc_object::rootReleaseShouldDealloc()
 {
     return rootRelease(false, false);
 }
+/**
+ 使用 LoadExclusive 获取 isa 内容
+ 将 isa 中的引用计数减一
+ 调用 StoreReleaseExclusive 方法保存新的 isa
+
+ 
+ extra_rc 只会保存额外的自动引用计数，对象实际的引用计数会在这个基础上 +1
+ Objective-C 使用 isa 中的 extra_rc 和 SideTable 来存储对象的引用计数
+ 在对象的引用计数归零时，会调用 dealloc 方法回收对象
+
+ */
 
 ALWAYS_INLINE bool 
 objc_object::rootRelease(bool performDealloc, bool handleUnderflow)
@@ -672,7 +699,7 @@ objc_object::rootRelease(bool performDealloc, bool handleUnderflow)
         return overrelease_error();
         // does not actually return
     }
-    newisa.deallocating = true;
+    newisa.deallocating = true;//deallocating 标记位。 确保消息只会发送一次
     if (!StoreExclusive(&isa.bits, oldisa.bits, newisa.bits)) goto retry;
 
     if (slowpath(sideTableLocked)) sidetable_unlock();

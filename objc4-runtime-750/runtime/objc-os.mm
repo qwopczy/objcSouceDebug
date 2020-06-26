@@ -884,6 +884,9 @@ void _objc_atfork_child()
  map_images 调用是由dyld发起的，由ImageLoader通知dyld进行调用。
  
  在Runtime加载时，会调用_objc_init函数，并在内部注册三个函数指针。其中map_images函数是初始化的关键，内部完成了大量Runtime环境的初始化操作。
+ 
+ images表示的是二进制文件（可执行文件或者动态链接库.so文件）编译后的符号、代码等。所以 load_images 的工作是传入处理过后的二进制文件并让 Runtime 进行处理，并且每一个文件对应一个抽象实例来负责加载，这里的实例是 ImageLoader
+ dyld::notifySingle(dyld_image_states, ImageLoader const*)
 **********************************************************************/
 // runtime加载入口=====
 void _objc_init(void)

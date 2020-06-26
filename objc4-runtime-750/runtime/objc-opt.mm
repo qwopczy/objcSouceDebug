@@ -149,6 +149,7 @@ bool noMissingWeakSuperclasses(void)
 
 /***********************************************************************
 * Return YES if this image's dyld shared cache optimizations are valid.
+ 已预先优化
 **********************************************************************/
 bool header_info::isPreoptimized() const
 {

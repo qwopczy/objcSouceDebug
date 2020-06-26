@@ -343,25 +343,33 @@ weak_entry_for_referent(weak_table_t *weak_table, objc_object *referent)
  * @param weak_table The global weak table.
  * @param referent The object.
  * @param referrer The weak reference.
+ * 旧对象解除注册操作
  */
 void
 weak_unregister_no_lock(weak_table_t *weak_table, id referent_id, 
                         id *referrer_id)
 {
+    // 在入口方法中，传入了 weak_table 弱引用表，referent_id 旧对象以及 referent_id 旧对象对应的地址
+    // 用指针去访问 oldObj 和 *location
     objc_object *referent = (objc_object *)referent_id;
     objc_object **referrer = (objc_object **)referrer_id;
 
     weak_entry_t *entry;
-
+    // 如果其对象为 nil，无需取消注册
     if (!referent) return;
 
+    // weak_entry_for_referent 根据首对象查找 weak_entry
     if ((entry = weak_entry_for_referent(weak_table, referent))) {
+        // 通过地址来解除引用关联
         remove_referrer(entry, referrer);
         bool empty = true;
+        // 检测 out_of_line 位的情况
+        // 检测 num_refs 位的情况
         if (entry->out_of_line()  &&  entry->num_refs != 0) {
             empty = false;
         }
         else {
+            // 将引用表中记录为空
             for (size_t i = 0; i < WEAK_INLINE_COUNT; i++) {
                 if (entry->inline_referrers[i]) {
                     empty = false; 
@@ -370,11 +378,13 @@ weak_unregister_no_lock(weak_table_t *weak_table, id referent_id,
             }
         }
 
+        // 从弱引用的 zone 表中删除
         if (empty) {
             weak_entry_remove(weak_table, entry);
         }
     }
 
+    // 这里不会设置 *referrer = nil，因为 objc_storeWeak() 函数会需要该指针
     // Do not set *referrer = nil. objc_storeWeak() requires that the 
     // value not change.
 }
@@ -386,22 +396,31 @@ weak_unregister_no_lock(weak_table_t *weak_table, id referent_id,
  * @param weak_table The global weak table.
  * @param referent The object pointed to by the weak reference.
  * @param referrer The weak pointer address.
+ * 新对象添加注册操作
+ * weak_register_no_lock 函数把新的对象进行注册操作，完成与对应的弱引用表进行绑定操作
  */
 id 
 weak_register_no_lock(weak_table_t *weak_table, id referent_id, 
                       id *referrer_id, bool crashIfDeallocating)
 {
+    // 在入口方法中，传入了 weak_table 弱引用表，referent_id 旧对象以及 referent_id 旧对象对应的地址
+    // 用指针去访问 oldObj 和 *location
     objc_object *referent = (objc_object *)referent_id;
     objc_object **referrer = (objc_object **)referrer_id;
 
+    // 检测对象是否生效、以及是否使用了 tagged pointer 技术
     if (!referent  ||  referent->isTaggedPointer()) return referent_id;
 
     // ensure that the referenced object is viable
+    // 保证引用对象是否有效
+    // hasCustomRR 方法检查类（包括其父类）中是否含有默认的方法
     bool deallocating;
     if (!referent->ISA()->hasCustomRR()) {
+        // 检查 dealloc 状态
         deallocating = referent->rootIsDeallocating();
     }
     else {
+        // 会返回 referent 的 SEL_allowsWeakReference 方法的地址
         BOOL (*allowsWeakReference)(objc_object *, SEL) = 
             (BOOL(*)(objc_object *, SEL))
             object_getMethodImplementation((id)referent, 
@@ -413,6 +432,7 @@ weak_register_no_lock(weak_table_t *weak_table, id referent_id,
             ! (*allowsWeakReference)(referent, SEL_allowsWeakReference);
     }
 
+    // 由于 dealloc 导致 crash ，并输出日志
     if (deallocating) {
         if (crashIfDeallocating) {
             _objc_fatal("Cannot form weak reference to instance (%p) of "
@@ -425,16 +445,23 @@ weak_register_no_lock(weak_table_t *weak_table, id referent_id,
     }
 
     // now remember it and where it is being stored
+    // 记录并存储对应引用表 weak_entry
     weak_entry_t *entry;
+    // 对于给定的弱引用查询 weak_table
     if ((entry = weak_entry_for_referent(weak_table, referent))) {
+        // 对于给定的弱引用查询 weak_table
         append_referrer(entry, referrer);
     } 
     else {
+        // 自行创建弱引用表
         weak_entry_t new_entry(referent, referrer);
+        // 如果给定的弱引用表满容，进行自增长
         weak_grow_maybe(weak_table);
+        // 向对象添加弱引用表关联，不进行检查直接修改指针指向
         weak_entry_insert(weak_table, &new_entry);
     }
 
+    // 向对象添加弱引用表关联，不进行检查直接修改指针指向
     // Do not set *referrer. objc_storeWeak() requires that the 
     // value not change.
 
@@ -456,7 +483,8 @@ weak_is_registered_no_lock(weak_table_t *weak_table, id referent_id)
  * provided object so that they can no longer be used.
  * 
  * @param weak_table 
- * @param referent The object being deallocated. 
+ * @param referent The object being deallocated.
+ * 这个函数会在weak_table中，清空引用计数表并清除弱引用表，将所有weak引用指nil。
  */
 void 
 weak_clear_no_lock(weak_table_t *weak_table, id referent_id) 

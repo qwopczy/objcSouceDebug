@@ -29,8 +29,17 @@
 #include "objc-loadmethod.h"
 #include "objc-private.h"
 
+/**
+ id 参数可以传递一个类信息，这里是将 cls Class 的指针和 SEL 选择子作为参数传入。
+ 至此完成了 load 方法的动态调用。
+ */
 typedef void(*load_method_t)(id, SEL);
 
+/**
+ 其 Class 指针和方法指针的记录手段是通过构造 loadable_classes 这个类型的数组进行静态线性表记录
+ 
+ 全局 Class 存储线性表结构，内部记录的信息只有 Class 指针和方法指针
+ */
 struct loadable_class {
     Class cls;  // may be nil
     IMP method;
@@ -58,13 +67,16 @@ static int loadable_categories_allocated = 0;
 * add_class_to_loadable_list
 * Class cls has just become connected. Schedule it for +load if
 * it implements a +load method.
+ 存储 Class 的全局表数据结构
 **********************************************************************/
 void add_class_to_loadable_list(Class cls)
 {
+    // 定义方法指针
+    // 目的是构造函数指针
     IMP method;
 
     loadMethodLock.assertLocked();
-
+    // 通过 cls 中的 getLoadMethod 方法，直接获得 load 方法体存储地址
     method = cls->getLoadMethod();
     if (!method) return;  // Don't bother if cls has no +load method
     
@@ -72,17 +84,19 @@ void add_class_to_loadable_list(Class cls)
         _objc_inform("LOAD: class '%s' scheduled for +load", 
                      cls->nameForLogging());
     }
-    
+    // 判断数组是否已满
     if (loadable_classes_used == loadable_classes_allocated) {
+        // 动态扩容，为线性表释放空间
         loadable_classes_allocated = loadable_classes_allocated*2 + 16;
         loadable_classes = (struct loadable_class *)
             realloc(loadable_classes,
                               loadable_classes_allocated *
                               sizeof(struct loadable_class));
     }
-    
+    // 将 Class 指针和方法指针记录
     loadable_classes[loadable_classes_used].cls = cls;
     loadable_classes[loadable_classes_used].method = method;
+    // 游标自加偏移
     loadable_classes_used++;
 }
 
@@ -180,30 +194,38 @@ void remove_category_from_loadable_list(Category cat)
 * If new classes become loadable, +load is NOT called for them.
 *
 * Called only by call_load_methods().
+ 其实 call_load_methods 由以上代码可知，仅是运行 load 方法的入口。其中最重要的方法 call_class_loads 会从一个待加载的类列表 loadable_classes 中寻找对应的类，并使用 selector(load) 的实现并执行。
 **********************************************************************/
 static void call_class_loads(void)
 {
+    // 声明下标偏移
     int i;
     
     // Detach current loadable list.
+    // 分离加载的 Class 列表
     struct loadable_class *classes = loadable_classes;
+    // 调用标记
     int used = loadable_classes_used;
     loadable_classes = nil;
     loadable_classes_allocated = 0;
     loadable_classes_used = 0;
     
+    // 调用列表中的 Class 类的 load 方法
     // Call all +loads for the detached list.
     for (i = 0; i < used; i++) {
+        // 获取 Class 指针
         Class cls = classes[i].cls;
+        // 获取方法对象
         load_method_t load_method = (load_method_t)classes[i].method;
         if (!cls) continue; 
 
         if (PrintLoading) {
             _objc_inform("LOAD: +[%s load]\n", cls->nameForLogging());
         }
+        // 方法调用 函数指针调用 load 方法
         (*load_method)(cls, SEL_load);
     }
-    
+    // 方法调用
     // Destroy the detached list.
     if (classes) free(classes);
 }
@@ -336,23 +358,30 @@ static bool call_category_loads(void)
 **********************************************************************/
 void call_load_methods(void)
 {
+    // 是否已经录入
     static bool loading = NO;
+    // 是否有关联的 Category
     bool more_categories;
 
     loadMethodLock.assertLocked();
 
+    // 由于 loading 是全局静态布尔量，如果已经录入方法则直接退出
     // Re-entrant calls do nothing; the outermost call will finish the job.
     if (loading) return;
     loading = YES;
 
+    // 声明一个 autoreleasePool 对象
+    // 使用 push 操作其目的是为了创建一个新的 autoreleasePool 对象
     void *pool = objc_autoreleasePoolPush();
 
     do {
+        // 重复调用 load 方法，直到没有
         // 1. Repeatedly call class +loads until there aren't any more
         while (loadable_classes_used > 0) {
             call_class_loads();
         }
 
+        // 调用 Category 中的 load 方法
         // 2. Call category +loads ONCE
         more_categories = call_category_loads();
 
@@ -361,6 +390,7 @@ void call_load_methods(void)
 
     objc_autoreleasePoolPop(pool);
 
+    // 更改全局标记，表示已经录入
     loading = NO;
 }
 

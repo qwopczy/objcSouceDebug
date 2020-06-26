@@ -269,6 +269,7 @@
 		08FB7794FE84155DC02AAC07 /* objc */ = {
 			isa = PBXGroup;
 			children = (
+				E5E7FDB624A4F66A000A2796 /* git debug */,
 				BC8B5D1212D3D48100C78A5B /* libauto.dylib */,
 				838485C60D6D687700CEA253 /* Public Headers */,
 				838485C70D6D688200CEA253 /* Private Headers */,
@@ -445,6 +446,13 @@
 				39ABD71F12F0B61800D1054C /* objc-weak.h */,
 			);
 			name = "Project Headers";
+			sourceTree = "<group>";
+		};
+		E5E7FDB624A4F66A000A2796 /* git debug */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "git debug";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

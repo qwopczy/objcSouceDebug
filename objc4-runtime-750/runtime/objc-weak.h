@@ -78,14 +78,14 @@ typedef DisguisedPtr<objc_object *> weak_referrer_t;
 #define REFERRERS_OUT_OF_LINE 2
 
 struct weak_entry_t {
-    DisguisedPtr<objc_object> referent;
+    DisguisedPtr<objc_object> referent;//对泛型对象的指针做了一个封装
     union {
         struct {
             weak_referrer_t *referrers;
-            uintptr_t        out_of_line_ness : 2;
-            uintptr_t        num_refs : PTR_MINUS_2;
-            uintptr_t        mask;
-            uintptr_t        max_hash_displacement;
+            uintptr_t        out_of_line_ness : 2;//最低有效位，也是标志位。当标志位 0 时，增加引用表指针纬度
+            uintptr_t        num_refs : PTR_MINUS_2;//引用数值。这里记录弱引用表中引用有效数字，因为弱引用表使用的是静态 hash 结构，所以需要使用变量来记录数目。
+            uintptr_t        mask;//计数辅助量
+            uintptr_t        max_hash_displacement;//hash 元素上限阈值。
         };
         struct {
             // out_of_line_ness field is low bits of inline_referrers[1]
@@ -117,9 +117,13 @@ struct weak_entry_t {
  * and weak_entry_t structs as their values.
  */
 struct weak_table_t {
+    // 保存了所有指向指定对象的 weak 指针
     weak_entry_t *weak_entries;
+    // 存储空间
     size_t    num_entries;
+    // 参与判断引用计数辅助量
     uintptr_t mask;
+    // hash key 最大偏移值
     uintptr_t max_hash_displacement;
 };
 

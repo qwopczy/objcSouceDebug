@@ -46,7 +46,7 @@ __attribute__((attribute1, attribute2));
  
  对象关系映射(Object Relational Mapping)，用于面向对象语言中不同系统数据之间的转换。 可以通过对象关系映射来实现JSON转模型，使用比较多的是Mantle、MJExtension、
  */
-        TestObject *object = [[TestObject alloc] init];
+//        TestObject *object = [[TestObject alloc] init];
 //        object.name = @"test";
 //        [object release];
         //
@@ -63,11 +63,27 @@ __attribute__((attribute1, attribute2));
         //
         //        NSLog(@"hello world");
         
-         NSObject *p = [[NSObject alloc] init];
-         __weak NSObject *p1 __attribute__((unused)) = p; //unused属性消除这个警告。
+//         NSObject *p = [[NSObject alloc] init];
+//         __weak NSObject *p1 __attribute__((unused)) = p; //unused属性消除这个警告。
+        /**
+         //        void *context = objc_autoreleasePoolPush();
+         context 正是这个哨兵对象的地址
+         //                objc_autoreleasePoolPop(context);
+         */
+        
+        
+        @autoreleasepool{
+            NSObject *p2 = [[NSObject alloc] init];
+            __weak NSObject *p3 __attribute__((unused)) = p2;
+            // {}中的代码
+            NSLog(@"pop before%@",p2);
+            
+        }
+        
 //         [p1 release];
          //        [p release];
          //        __weak NSObject *p2 = p;
+        /*
          void (*function) (id self, SEL _cmd);
          
          TestObject *object1 = [[TestObject alloc] init];
@@ -85,7 +101,7 @@ __attribute__((attribute1, attribute2));
          class_replaceMethod([TestObject class], @selector(testMethodNew:), function2, types);
          TestObject *object2 = [TestObject new];
          [object2 testMethodNew:@"lxz"];
-         
+         */
          NSLog(@"hello world===");
          
          
@@ -143,8 +159,8 @@ __attribute__((attribute1, attribute2));
 //                run_objc_inspect();
                 
                 
-                Class newClass = objc_allocateClassPair([NSObject class], "TestClass", 0);
-                objc_registerClassPair(newClass);
+//                Class newClass = objc_allocateClassPair([NSObject class], "TestClass", 0);
+//                objc_registerClassPair(newClass);
         CFRunLoopRun();
     }
     return 0;

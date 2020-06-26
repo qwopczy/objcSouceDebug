@@ -589,6 +589,18 @@ struct class_ro_t {
 *
 * countLists/beginLists/endLists iterate the metadata lists
 * count/begin/end iterate the underlying metadata elements
+ 
+ list_array_tt 是一个泛型结构体，用于存储一些元数据，而它实际上是元数据的二维数组:
+ 
+ 其中 Element 表示元数据的类型，比如 method_t，而 List 则表示用于存储元数据的一维数组，比如 method_list_t。
+
+ list_array_tt 有三种状态:
+
+ 1自身为空，可以类比为 [[]]
+ 2它只有一个指针，指向一个元数据的集合，可以类比为 [[1, 2]]
+ 3它有多个指针，指向多个元数据的集合，可以类比为 [[1, 2], [3, 4]]
+ 当一个类刚创建时，它可能处于状态 1 或 2，但如果使用 class_addMethod 或者 category 来添加方法，就会进入状态 3，而且一旦进入状态 3 就再也不可能回到其他状态，即使新增的方法后来又被移除掉。
+ 
 **********************************************************************/
 template <typename Element, typename List>
 class list_array_tt {
@@ -719,7 +731,7 @@ class list_array_tt {
     }
 
     void attachLists(List* const * addedLists, uint32_t addedCount) {
-        //通过对原有地址做位移，并将新创建的method_list_t结构体copy到方法列表中
+        //通过对原有地址做位移，并将新创建的method_list_t结构体copy到方法列表中 将原来的空间拓展，然后把原来的数组复制到后面 最后再把新数组复制到前面
         if (addedCount == 0) return;
 
         if (hasArray()) {
@@ -968,8 +980,8 @@ public:
         clearBits(FAST_HAS_DEFAULT_AWZ);
     }
 #else
-    bool hasDefaultAWZ() {
-        return data()->flags & RW_HAS_DEFAULT_AWZ;
+    bool hasDefaultAWZ() {//判断当前class是否有默认的allocWithZone。
+        return data()->flags & RW_HAS_DEFAULT_AWZ;//RW_HAS_DEFAULT_AWZ 这个是用来标示当前的class或者是superclass是否有默认的 alloc/allocWithZone:
     }
     void setHasDefaultAWZ() {
         data()->setFlags(RW_HAS_DEFAULT_AWZ);

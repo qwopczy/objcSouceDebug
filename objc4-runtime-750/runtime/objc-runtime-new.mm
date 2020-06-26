@@ -64,6 +64,7 @@ static bool ClassNSObjectRRSwizzled;
 
 /***********************************************************************
 * Lock management
+ 全局 loadMethodLock 是一个 recursive_mutex_t 类型的变量。这个是苹果公司通过 C 实现的一个互斥递归锁 Class，来解决多次上锁而不会发生死锁的问题。
 **********************************************************************/
 mutex_t runtimeLock;
 mutex_t selLock;
@@ -771,6 +772,7 @@ prepareMethodLists(Class cls, method_list_t **addedLists, int addedCount,
 // Assumes the categories in cats are all loaded and sorted by load order, 
 // oldest categories first.
 // 获取到Category的Protocol list、Property list、Method list，然后通过attachLists函数添加到所属的类中
+//attachCategories 就是处理 category 的核心所在
 static void 
 attachCategories(Class cls, category_list *cats, bool flush_caches)
 {
@@ -2192,6 +2194,9 @@ map_images(unsigned count, const char * const paths[],
 * Process +load in the given images which are being mapped in by dyld.
 * load_images函数中主要做了两件事，首先通过prepare_load_methods函数准备Class load list和Category load list，然后通过call_load_methods函数调用已经准备好的两个方法列表。
 
+ // 执行 dyld 提供的并且已被 map_images 处理后的 image 中的 +load
+ // 锁定状态：runtimeLock写操作和 loadMethodLock 方法，保证线程安全
+ 
 * Locking: write-locks runtimeLock and loadMethodLock
 **********************************************************************/
 extern bool hasLoadMethods(const headerType *mhdr);
@@ -2200,19 +2205,25 @@ extern void prepare_load_methods(const headerType *mhdr);
 void
 load_images(const char *path __unused, const struct mach_header *mh)
 {
+    // 没有查询到传入 Class 中的 load 方法，视为锁定状态
+    // 则无需给其加载权限，直接返回
     // Return without taking locks if there are no +load methods here.
     if (!hasLoadMethods((const headerType *)mh)) return;
 
+    // 定义可递归锁对象
+    // 由于 load_images 方法由 dyld 进行回调，所以数据需上锁才能保证线程安全
+    // 为了防止多次加锁造成的死锁情况，使用可递归锁解决
     recursive_mutex_locker_t lock(loadMethodLock);
 
-    // Discover load methods
+    // Discover load methods  收集所有的 +load 方法
     {
+        // 对 Darwin 提供的线程写锁的封装类
         mutex_locker_t lock2(runtimeLock);
         // 准备Class list和Category list
         prepare_load_methods((const headerType *)mh);
     }
 
-    // Call +load methods (without runtimeLock - re-entrant)
+    // Call +load methods (without runtimeLock - re-entrant) 调用 +load 方法
     // 调用已经准备好的Class list和Category list
     call_load_methods();
 }
@@ -2778,7 +2789,8 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
     // 发现和处理所有Category
     // Discover categories. 
     for (EACH_HEADER) {
-        // 外部循环遍历找到当前类，查找类对应的Category数组
+        // 外部循环遍历找到当前类，查找类对应的Category结构体数组
+        //拿到的catlist就是编译器为我们准备的category_t数组
         category_t **catlist = 
             _getObjc2CategoryList(hi, &count);
         bool hasClassProperties = hi->info()->hasCategoryClassProperties();
@@ -2809,6 +2821,8 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
             if (cat->instanceMethods ||  cat->protocols  
                 ||  cat->instanceProperties) 
             {
+                //addUnattachedCategoryForClass只是把类和category做一个关联映射 而remethodizeClass才是真正去处理添加事宜的功臣
+                
                 // 将Category添加到对应Class的value中，value是Class对应的所有category数组
                 addUnattachedCategoryForClass(cat, cls, hi);
                 // 将Category的method、protocol、property添加到Class
@@ -2921,27 +2935,32 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
 * prepare_load_methods
 * Schedule +load for classes in this image, any un-+load-ed 
 * superclasses in other images, and any categories in this image.
+ // 用来规划执行 Class 的 load 方法，包括父类
+ // 递归调用 +load 方法通过 cls 指针以及
+ // 要求是 cls 指针的 Class 必须已经进行链接操作
 **********************************************************************/
 // Recursively schedule +load for cls and any un-+load-ed superclasses.
 // cls must already be connected.
 static void schedule_class_load(Class cls)
 {
     if (!cls) return;
+    // 查看 RW_REALIZED 是否被标记
     assert(cls->isRealized());  // _read_images should realize
-// 已经添加Class的load方法到调用列表中
+// 已经添加Class的load方法到调用列表中 // 查看 RW_LOADED 是否被标记
     if (cls->data()->flags & RW_LOADED) return;
 
     // 确保super已经被添加到load列表中，默认是整个继承者链的顺序
-    // Ensure superclass-first ordering
+    // Ensure superclass-first ordering // 递归到深层（超类）运行
     schedule_class_load(cls->superclass);
 
-    // 将IMP和Class添加到调用列表
+    // 将IMP和Class添加到调用列表 // 将需要执行 load 的 Class 添加到一个全局列表中
     add_class_to_loadable_list(cls);
-    // 设置Class的flags，表示已经添加Class到调用列表中
+    // 标记 RW_LOADED 符号 设置Class的flags，表示已经添加Class到调用列表中
     cls->setInfo(RW_LOADED); 
 }
 
 // Quick scan for +load methods that doesn't take a lock.
+//快速查询是否存在 +load 函数列表
 bool hasLoadMethods(const headerType *mhdr)
 {
     size_t count;
@@ -2957,25 +2976,29 @@ void prepare_load_methods(const headerType *mhdr)
 
     runtimeLock.assertLocked();
 
-    // 获取到非懒加载的类的列表
+    // 获取到非懒加载的类的列表 收集 Class 中的 +load 方法
     classref_t *classlist = 
         _getObjc2NonlazyClassList(mhdr, &count);
     for (i = 0; i < count; i++) {
         // 设置Class的调用列表
+        // 通过 remapClass 获取类指针
+        // schedul_class_load 递归到父类逐层载入
         schedule_class_load(remapClass(classlist[i]));
     }
  
-    // 获取到非懒加载的Category列表
+    // 获取到非懒加载的Category列表 收集 Category 中的 +load 方法
     category_t **categorylist = _getObjc2NonlazyCategoryList(mhdr, &count);
     for (i = 0; i < count; i++) {
         category_t *cat = categorylist[i];
+        // 通过 remapClass 获取 Category 对象存有的 Class 对象
         Class cls = remapClass(cat->cls);
         // 忽略弱链接的类别
         if (!cls) continue;  // category for ignored weak-linked class
         // 实例化所属的类
+        // 对类进行第一次初始化，主要用来分配可读写数据空间并返回真正的类结构
         realizeClass(cls);
         assert(cls->ISA()->isRealized());
-        // 设置Category的调用列表
+        // 设置Category的调用列表 // 将需要执行 load 的 Category 添加到一个全局列表中
         add_category_to_loadable_list(cat);
     }
 }
@@ -6253,8 +6276,12 @@ static void objc_initializeClassPair_internal(Class superclass, const char *name
 {
     runtimeLock.assertLocked();
 
+    // 只读结构 read only
+    // 分别声明 cls 和 meta 两个
     class_ro_t *cls_ro_w, *meta_ro_w;
     
+    // 数据设置操作
+    // data() -> ro 成员，与方法列表，属性，协议相关
     cls->setData((class_rw_t *)calloc(sizeof(class_rw_t), 1));
     meta->setData((class_rw_t *)calloc(sizeof(class_rw_t), 1));
     cls_ro_w   = (class_ro_t *)calloc(sizeof(class_ro_t), 1);
@@ -6263,18 +6290,22 @@ static void objc_initializeClassPair_internal(Class superclass, const char *name
     meta->data()->ro = meta_ro_w;
 
     // Set basic info
-
+    // 进步信息数据操作
     cls->data()->flags = RW_CONSTRUCTING | RW_COPIED_RO | RW_REALIZED | RW_REALIZING;
     meta->data()->flags = RW_CONSTRUCTING | RW_COPIED_RO | RW_REALIZED | RW_REALIZING;
     cls->data()->version = 0;
     meta->data()->version = 7;
 
+    // cls 的 flags 属性不进行标记
     cls_ro_w->flags = 0;
+    // meta_ro_w 的 flags 属性进行 metaclass 类型标记
     meta_ro_w->flags = RO_META;
     if (!superclass) {
+        // 如果没有父类的话，则当前类也为 metaclass
         cls_ro_w->flags |= RO_ROOT;
         meta_ro_w->flags |= RO_ROOT;
     }
+    // 有无父类情况，传递 instanceStart
     if (superclass) {
         cls_ro_w->instanceStart = superclass->unalignedInstanceSize();
         meta_ro_w->instanceStart = superclass->ISA()->unalignedInstanceSize();
@@ -6287,28 +6318,43 @@ static void objc_initializeClassPair_internal(Class superclass, const char *name
         meta->setInstanceSize(meta_ro_w->instanceStart);
     }
 
+    // 记录 Class 名
     cls_ro_w->name = strdupIfMutable(name);
     meta_ro_w->name = strdupIfMutable(name);
 
+    // 属性修饰符布局 底下分别记录了哪些 ivar 是 strong 或是 weak，都未记录则为 __unsafe_unretained 的对象类型。
+    // ivarLayout strong引用表
     cls_ro_w->ivarLayout = &UnsetLayout;
+    // weakIvarLayout weak引用表
     cls_ro_w->weakIvarLayout = &UnsetLayout;
 
     meta->chooseClassArrayIndex();
     cls->chooseClassArrayIndex();
 
     // Connect to superclasses and metaclasses
+    // 通过获取到的 cls 指针，调用 isa 初始化命令
     cls->initClassIsa(meta);
     if (superclass) {
+        // 如果拥有父类，更新 meta 的 isa 指向
         meta->initClassIsa(superclass->ISA()->ISA());
+        // 更新 cls 父类信息
         cls->superclass = superclass;
+        // meta 的父类指向父类的 isa
         meta->superclass = superclass->ISA();
+        // 向父类中增加该类信息
         addSubclass(superclass, cls);
+        // 向父类的 isa 中记录该信息
         addSubclass(superclass->ISA(), meta);
     } else {
+        // 为 meta 初始化 isa 信息 NSobject?
         meta->initClassIsa(meta);
+        // 由于该类为 rootclass，无父类信息
+        // 让其父类指向 Nil
         cls->superclass = Nil;
+        // 令 meta 的父类指向 cls
         meta->superclass = cls;
         addRootClass(cls);
+        // 向 cls 中增加 meta 指针信息
         addSubclass(cls, meta);
     }
 
@@ -6651,14 +6697,15 @@ _class_createInstanceFromZone(Class cls, size_t extraBytes, void *zone,
     bool hasCxxCtor = cls->hasCxxCtor();
     bool hasCxxDtor = cls->hasCxxDtor();
     bool fast = cls->canAllocNonpointer();
-
+//获取对象大小之后，直接调用calloc函数就可以为对象分配内存空间了。
     size_t size = cls->instanceSize(extraBytes);
     if (outAllocatedSize) *outAllocatedSize = size;
-
+//calloc 这个函数也是为什么我们申请出来的对象，初始值是0或者nil的原因。因为这个calloc( )函数会默认的把申请出来的空间初始化为0或者nil。
     id obj;
     if (!zone  &&  fast) {
         obj = (id)calloc(1, size);
         if (!obj) return nil;
+        //申请完内存空间之后，还需要再初始化Isa指针。
         obj->initInstanceIsa(cls, hasCxxDtor);
     } 
     else {
@@ -6668,7 +6715,7 @@ _class_createInstanceFromZone(Class cls, size_t extraBytes, void *zone,
             obj = (id)calloc(1, size);
         }
         if (!obj) return nil;
-
+//申请完内存空间之后，还需要再初始化Isa指针。
         // Use raw pointer isa on the assumption that they might be 
         // doing something weird with the zone or RR.
         obj->initIsa(cls);
