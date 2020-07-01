@@ -42,7 +42,7 @@ private:
     MethodCacheIMP _imp;
     cache_key_t _key;
 #else
-    cache_key_t _key;
+    cache_key_t _key; //这个key实际上就是方法的SEL，也就是方法名
     MethodCacheIMP _imp;
 #endif
 

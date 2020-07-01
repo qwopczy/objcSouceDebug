@@ -1196,8 +1196,10 @@ static ALWAYS_INLINE bool
 prepareOptimizedReturn(ReturnDisposition disposition)
 {
     assert(getReturnDisposition() == ReturnAtPlus0);
+    // 检查使用该函数的方法或调用方的的调用列表，如果紧接着执行 objc_retainAutoreleasedReturnValue ，将不注册到 autoreleasePool 中
 
     if (callerAcceptsOptimizedReturn(__builtin_return_address(0))) {
+        // 设置标记 ReturnAtPlus1
         if (disposition) setReturnDisposition(disposition);
         return true;
     }

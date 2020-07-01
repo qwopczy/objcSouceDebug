@@ -76,7 +76,9 @@ typedef DisguisedPtr<objc_object *> weak_referrer_t;
 // (disguised nil or 0x80..00) or 0b11 (any other address).
 // Therefore out_of_line_ness == 0b10 is used to mark the out-of-line state.
 #define REFERRERS_OUT_OF_LINE 2
-
+/**
+ 在 weak_entry_t 的结构中，DisguisedPtr<objc_object> referent 是对泛型对象的指针做了一个封装，通过这个泛型类来解决内存泄漏的问题。从注释中写 out_of_line 成员为最低有效位，当其为0的时候， weak_referrer_t 成员将扩展为多行静态 hash table。其实其中的 weak_referrer_t 是二维 objc_object 的别名，通过一个二维指针地址偏移，用下标作为 hash 的 key，做成了一个弱引用散列。
+ */
 struct weak_entry_t {
     DisguisedPtr<objc_object> referent;//对泛型对象的指针做了一个封装
     union {

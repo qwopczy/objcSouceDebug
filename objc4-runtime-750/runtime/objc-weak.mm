@@ -282,6 +282,7 @@ static void weak_compact_maybe(weak_table_t *weak_table)
 
 /**
  * Remove entry from the zone's table of weak references.
+ * 从弱引用的 zone 表中删除
  */
 static void weak_entry_remove(weak_table_t *weak_table, weak_entry_t *entry)
 {
@@ -344,6 +345,8 @@ weak_entry_for_referent(weak_table_t *weak_table, objc_object *referent)
  * @param referent The object.
  * @param referrer The weak reference.
  * 旧对象解除注册操作
+ * 从weak_table中根据找到被引用对象对应的entry，然后将弱引用变量指针referrer从entry中移除。
+ 移除弱引用变量指针referrer之后，检查entry是否为空，如果为空将其从weak_table中移除。
  */
 void
 weak_unregister_no_lock(weak_table_t *weak_table, id referent_id, 
@@ -361,10 +364,11 @@ weak_unregister_no_lock(weak_table_t *weak_table, id referent_id,
     // weak_entry_for_referent 根据首对象查找 weak_entry
     if ((entry = weak_entry_for_referent(weak_table, referent))) {
         // 通过地址来解除引用关联
+        // 找到 weak 表中对应记录后，将引用从记录中移除
         remove_referrer(entry, referrer);
         bool empty = true;
         // 检测 out_of_line 位的情况
-        // 检测 num_refs 位的情况
+        // 检测  num_refs：引用数值。这里记录弱引用表中引用有效数字，因为弱引用表使用的是静态 hash 结构，所以需要使用变量来记录数目
         if (entry->out_of_line()  &&  entry->num_refs != 0) {
             empty = false;
         }
@@ -378,8 +382,9 @@ weak_unregister_no_lock(weak_table_t *weak_table, id referent_id,
             }
         }
 
-        // 从弱引用的 zone 表中删除
+        // 如果当前记录为空则移除记录
         if (empty) {
+            // 从弱引用的 zone 表中删除
             weak_entry_remove(weak_table, entry);
         }
     }
@@ -449,11 +454,12 @@ weak_register_no_lock(weak_table_t *weak_table, id referent_id,
     weak_entry_t *entry;
     // 对于给定的弱引用查询 weak_table
     if ((entry = weak_entry_for_referent(weak_table, referent))) {
-        // 对于给定的弱引用查询 weak_table
+        //  weak_table 增加弱引用表于附加对象上
         append_referrer(entry, referrer);
     } 
     else {
-        // 自行创建弱引用表
+        
+        // 没有在 weak 表中找到对应记录，  自行创建弱引用表 则新建一个记录
         weak_entry_t new_entry(referent, referrer);
         // 如果给定的弱引用表满容，进行自增长
         weak_grow_maybe(weak_table);
@@ -461,7 +467,6 @@ weak_register_no_lock(weak_table_t *weak_table, id referent_id,
         weak_entry_insert(weak_table, &new_entry);
     }
 
-    // 向对象添加弱引用表关联，不进行检查直接修改指针指向
     // Do not set *referrer. objc_storeWeak() requires that the 
     // value not change.
 

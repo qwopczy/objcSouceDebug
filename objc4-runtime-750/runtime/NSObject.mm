@@ -366,7 +366,7 @@ storeWeak(id *location, objc_object *newObj)
     // Assign new value, if any. 分配新值
     if (haveNew) {
         newObj = (objc_object *)
-            weak_register_no_lock(&newTable->weak_table, (id)newObj, location, 
+            weak_register_no_lock(&newTable->weak_table, (id)newObj, location,
                                   crashIfDeallocating);
         // 如果弱引用被释放 weak_register_no_lock 方法返回 nil
         // weak_register_no_lock returns nil if weak store should be rejected
@@ -1951,8 +1951,9 @@ objc_retainAutoreleaseAndReturn(id obj)
 id 
 objc_autoreleaseReturnValue(id obj)
 {
+    // 如果走优化程序则直接返回对象
     if (prepareOptimizedReturn(ReturnAtPlus1)) return obj;
-
+// 否则还是走自动释放池
     return objc_autorelease(obj);
 }
 
@@ -1960,17 +1961,23 @@ objc_autoreleaseReturnValue(id obj)
 id 
 objc_retainAutoreleaseReturnValue(id obj)
 {
+    
     if (prepareOptimizedReturn(ReturnAtPlus0)) return obj;
 
     // not objc_autoreleaseReturnValue(objc_retain(obj)) 
     // because we don't need another optimization attempt
     return objc_retainAutoreleaseAndReturn(obj);
 }
-
+/**
+ 取出 TLS 中标记。
+ 重置 TLS 中标记至 ReturnAtPlus0 。
+ 判断使用了优化处理则返回对象，否则引用计数 + 1。
+ */
 // Accept a value returned through a +0 autoreleasing convention for use at +1.
 id
 objc_retainAutoreleasedReturnValue(id obj)
 {
+    // 如果 TLS 中标记表示使用了优化程序，则直接返回
     if (acceptOptimizedReturn() == ReturnAtPlus1) return obj;
 
     return objc_retain(obj);

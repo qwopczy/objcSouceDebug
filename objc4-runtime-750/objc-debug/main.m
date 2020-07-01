@@ -25,7 +25,13 @@ __attribute__((constructor(102))) static void beforeMain2() {
 __attribute__((destructor)) static void afterMain() {
     NSLog(@"after main");
 }
-
+void defaultFunction() {
+     id obj = [NSObject new];
+    __strong id obj1 = obj;
+//    __weak NSObject *p3 = obj;
+    
+    NSLog(@"%p objc_destroyWeak objc_storeStrong  will",obj);
+}
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -70,7 +76,8 @@ __attribute__((attribute1, attribute2));
          context 正是这个哨兵对象的地址
          //                objc_autoreleasePoolPop(context);
          */
-        
+        defaultFunction();
+        NSLog(@"@autoreleasepool before");
         
         @autoreleasepool{
             NSObject *p2 = [[NSObject alloc] init];
