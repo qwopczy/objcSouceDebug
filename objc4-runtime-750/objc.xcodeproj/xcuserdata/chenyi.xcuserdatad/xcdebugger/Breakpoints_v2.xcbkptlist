@@ -78,8 +78,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6422"
-            endingLineNumber = "6422"
+            startingLineNumber = "6459"
+            endingLineNumber = "6459"
             landmarkName = "objc_allocateClassPair(superclass, name, extraBytes)"
             landmarkType = "9">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5233"
-            endingLineNumber = "5233"
+            startingLineNumber = "5270"
+            endingLineNumber = "5270"
             landmarkName = "objc_class::setInitialized()"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1796"
-            endingLineNumber = "1796"
+            startingLineNumber = "1797"
+            endingLineNumber = "1797"
             landmarkName = "callAlloc(cls, checkNil)"
             landmarkType = "9">
             <Locations>
@@ -284,8 +284,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1815"
-            endingLineNumber = "1815"
+            startingLineNumber = "1816"
+            endingLineNumber = "1816"
             landmarkName = "callAlloc(cls, checkNil)"
             landmarkType = "9">
             <Locations>
@@ -355,22 +355,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "69DB0154-8CB6-4C7E-A117-95F7B11B3FBD"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "runtime/objc-object.h"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "objc_object::initIsa(cls)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "082C6A9B-52A2-4AAE-948B-DFC73D9FA1B0"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -378,8 +362,8 @@
             filePath = "runtime/objc-object.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
             landmarkName = "objc_object::initInstanceIsa(cls, hasCxxDtor)"
             landmarkType = "7">
          </BreakpointContent>
@@ -484,7 +468,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "41C2240E-14BC-46D5-A70B-BDF2572A3E5E"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "runtime/objc-runtime-new.mm"
@@ -538,8 +522,8 @@
             filePath = "runtime/objc-object.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "objc_object::initIsa(cls, nonpointer, hasCxxDtor)"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,8 +538,8 @@
             filePath = "runtime/objc-object.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "objc_object::initIsa(cls, nonpointer, hasCxxDtor)"
             landmarkType = "7">
          </BreakpointContent>
@@ -570,8 +554,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6735"
-            endingLineNumber = "6735"
+            startingLineNumber = "6772"
+            endingLineNumber = "6772"
             landmarkName = "class_createInstance(cls, extraBytes)"
             landmarkType = "9">
          </BreakpointContent>
@@ -586,8 +570,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6697"
-            endingLineNumber = "6697"
+            startingLineNumber = "6734"
+            endingLineNumber = "6734"
             landmarkName = "_class_createInstanceFromZone(cls, extraBytes, zone)"
             landmarkType = "9">
             <Locations>
@@ -649,8 +633,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1077"
-            endingLineNumber = "1077"
+            startingLineNumber = "1078"
+            endingLineNumber = "1078"
             landmarkName = "push()"
             landmarkType = "7">
          </BreakpointContent>
@@ -697,8 +681,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6277"
-            endingLineNumber = "6277"
+            startingLineNumber = "6314"
+            endingLineNumber = "6314"
             landmarkName = "objc_initializeClassPair_internal(superclass, name, cls, meta)"
             landmarkType = "9">
          </BreakpointContent>
@@ -822,8 +806,8 @@
             filePath = "runtime/objc-runtime-new.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6278"
-            endingLineNumber = "6278"
+            startingLineNumber = "6315"
+            endingLineNumber = "6315"
             landmarkName = "objc_initializeClassPair_internal(superclass, name, cls, meta)"
             landmarkType = "9">
          </BreakpointContent>
@@ -932,8 +916,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1901"
-            endingLineNumber = "1901"
+            startingLineNumber = "1902"
+            endingLineNumber = "1902"
             landmarkName = "objc_autoreleasePoolPush()"
             landmarkType = "9">
          </BreakpointContent>
@@ -948,8 +932,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "696"
-            endingLineNumber = "696"
+            startingLineNumber = "697"
+            endingLineNumber = "697"
             landmarkName = "AutoreleasePoolPage"
             landmarkType = "3">
          </BreakpointContent>
@@ -964,8 +948,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1043"
-            endingLineNumber = "1043"
+            startingLineNumber = "1044"
+            endingLineNumber = "1044"
             landmarkName = "autoreleaseNoPage(obj)"
             landmarkType = "7">
          </BreakpointContent>
@@ -980,8 +964,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1081"
-            endingLineNumber = "1081"
+            startingLineNumber = "1082"
+            endingLineNumber = "1082"
             landmarkName = "push()"
             landmarkType = "7">
          </BreakpointContent>
@@ -996,8 +980,8 @@
             filePath = "objc-debug/main.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -1012,8 +996,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1907"
-            endingLineNumber = "1907"
+            startingLineNumber = "1908"
+            endingLineNumber = "1908"
             landmarkName = "objc_autoreleasePoolPop(ctxt)"
             landmarkType = "9">
          </BreakpointContent>
@@ -1028,8 +1012,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "857"
-            endingLineNumber = "857"
+            startingLineNumber = "858"
+            endingLineNumber = "858"
             landmarkName = "releaseUntil(stop)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1044,8 +1028,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "878"
-            endingLineNumber = "878"
+            startingLineNumber = "879"
+            endingLineNumber = "879"
             landmarkName = "kill()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1060,8 +1044,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "492"
-            endingLineNumber = "492"
+            startingLineNumber = "493"
+            endingLineNumber = "493"
             landmarkName = "objc_destroyWeak(location)"
             landmarkType = "9">
          </BreakpointContent>
@@ -1185,8 +1169,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1807"
-            endingLineNumber = "1807"
+            startingLineNumber = "1808"
+            endingLineNumber = "1808"
             landmarkName = "callAlloc(cls, checkNil)"
             landmarkType = "9">
             <Locations>
@@ -1256,22 +1240,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "40C97B3F-6B33-44ED-AD59-905D47E0A6BF"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "objc-debug/main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "main(argc, argv)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "1201BA85-949C-4E71-A90E-169C634B0A00"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -1279,8 +1247,8 @@
             filePath = "objc-debug/main.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -1295,8 +1263,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "861"
-            endingLineNumber = "861"
+            startingLineNumber = "862"
+            endingLineNumber = "862"
             landmarkName = "releaseUntil(stop)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1311,8 +1279,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "839"
-            endingLineNumber = "839"
+            startingLineNumber = "840"
+            endingLineNumber = "840"
             landmarkName = "releaseUntil(stop)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1327,8 +1295,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2020"
-            endingLineNumber = "2020"
+            startingLineNumber = "2021"
+            endingLineNumber = "2021"
             landmarkName = "arr_init()"
             landmarkType = "9">
          </BreakpointContent>
@@ -1343,8 +1311,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1140"
-            endingLineNumber = "1140"
+            startingLineNumber = "1141"
+            endingLineNumber = "1141"
             landmarkName = "pop(token)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1359,8 +1327,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1138"
-            endingLineNumber = "1138"
+            startingLineNumber = "1139"
+            endingLineNumber = "1139"
             landmarkName = "pop(token)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1369,14 +1337,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FE423F47-C81C-4783-87CF-5A0919B7188B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "927"
-            endingLineNumber = "927"
+            startingLineNumber = "928"
+            endingLineNumber = "928"
             landmarkName = "pageForPointer(p)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1391,8 +1359,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "982"
-            endingLineNumber = "982"
+            startingLineNumber = "983"
+            endingLineNumber = "983"
             landmarkName = "autoreleaseFast(obj)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1407,42 +1375,10 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "977"
-            endingLineNumber = "977"
+            startingLineNumber = "978"
+            endingLineNumber = "978"
             landmarkName = "autoreleaseFast(obj)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "09D76EE2-2C75-46CB-B721-FE5D674FC8C6"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "runtime/NSObject.mm"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
-            landmarkName = "objc_storeStrong(location, obj)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "57F0E5C7-DFDB-445C-A1DF-51599635655F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "runtime/NSObject.mm"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1656"
-            endingLineNumber = "1656"
-            landmarkName = "objc_retain(obj)"
-            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1455,8 +1391,8 @@
             filePath = "objc-debug/main.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -1471,8 +1407,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1666"
-            endingLineNumber = "1666"
+            startingLineNumber = "1667"
+            endingLineNumber = "1667"
             landmarkName = "objc_release(obj)"
             landmarkType = "9">
          </BreakpointContent>
@@ -1487,42 +1423,10 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1273"
-            endingLineNumber = "1273"
+            startingLineNumber = "1274"
+            endingLineNumber = "1274"
             landmarkName = "objc_object::rootRetain_overflow(tryRetain)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "05FEDFA6-F17E-4A56-8CE7-A1576272B264"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "objc-debug/main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "main(argc, argv)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5EF4538C-EE52-45D4-9C4F-E1070ACF3A47"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "objc-debug/main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "defaultFunction()"
-            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1535,8 +1439,8 @@
             filePath = "runtime/NSObject.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1271"
-            endingLineNumber = "1271"
+            startingLineNumber = "1272"
+            endingLineNumber = "1272"
             landmarkName = "objc_object::rootRetain_overflow(tryRetain)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1551,8 +1455,8 @@
             filePath = "runtime/objc-object.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "472"
-            endingLineNumber = "472"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
             landmarkName = "objc_object::rootRetain()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1561,14 +1465,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "DE7E743E-7BF8-461B-9141-DD0648F73396"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "runtime/objc-object.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "484"
-            endingLineNumber = "484"
+            startingLineNumber = "493"
+            endingLineNumber = "493"
             landmarkName = "objc_object::rootRetain(tryRetain, handleOverflow)"
             landmarkType = "7">
             <Locations>
@@ -1583,8 +1487,8 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "117">
                </Location>
                <Location
@@ -1598,8 +1502,8 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "353">
                </Location>
                <Location
@@ -1613,8 +1517,8 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "165">
                </Location>
                <Location
@@ -1628,8 +1532,8 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "117">
                </Location>
                <Location
@@ -1643,8 +1547,8 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "62">
                </Location>
                <Location
@@ -1658,8 +1562,8 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "62">
                </Location>
                <Location
@@ -1673,43 +1577,11 @@
                   urlString = "file:///Users/chenyi/Desktop/gitHubCode/%E5%8E%9F%E7%94%9F/%E9%BB%91%E9%AD%94%E6%B3%95/objcSouceDebug/objc4-runtime-750/runtime/objc-object.h"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "484"
-                  endingLineNumber = "484"
+                  startingLineNumber = "493"
+                  endingLineNumber = "493"
                   offsetFromSymbolStart = "60">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "55DF6E67-10FC-4D8B-83BE-FD8F6E3239D1"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "objc-debug/main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "main(argc, argv)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "80246E2C-E7AA-49F4-A419-7A71DAB76F8A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "objc-debug/main.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "defaultFunction()"
-            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1757,6 +1629,118 @@
             startingLineNumber = "425"
             endingLineNumber = "425"
             landmarkName = "weak_register_no_lock(weak_table, referent_id, referrer_id, crashIfDeallocating)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9AC4589D-705D-461C-ACD6-68D9E284D9E4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "objc-debug/main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "main(argc, argv)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9D40CE57-7F76-43D6-9DE9-AE3EF3576E5F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "objc-debug/main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "defaultFunction()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A8A79520-6570-40F3-80CA-9EE4A9A35B6C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "objc-debug/main.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "defaultFunction()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EAA46698-48A7-47A1-8F95-61C14E1B40AF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1982"
+            endingLineNumber = "1982"
+            landmarkName = "objc_retainAutoreleasedReturnValue(obj)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "784B9B08-00C4-487D-B6F6-56FE118F2C7B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1659"
+            endingLineNumber = "1659"
+            landmarkName = "objc_retain(obj)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3026D6D7-52F7-4FA5-9D42-6B9E700784BD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1958"
+            endingLineNumber = "1958"
+            landmarkName = "objc_autoreleaseReturnValue(obj)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C03A3553-1C2B-4CF3-845B-0E73E41C5CCC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "runtime/NSObject.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1679"
+            endingLineNumber = "1679"
+            landmarkName = "objc_autorelease(obj)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

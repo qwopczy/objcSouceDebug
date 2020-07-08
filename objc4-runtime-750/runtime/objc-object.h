@@ -41,7 +41,7 @@ bool prepareOptimizedReturn(ReturnDisposition disposition);
 
 
 #if SUPPORT_TAGGED_POINTERS
-
+//系统分别定义了两个全局数组变量： 来保存所有的Tagged Pointer类型的类信息
 extern "C" { 
     extern Class objc_debug_taggedpointer_classes[_OBJC_TAG_SLOT_COUNT*2];
     extern Class objc_debug_taggedpointer_ext_classes[_OBJC_TAG_EXT_SLOT_COUNT];
@@ -72,18 +72,26 @@ objc_object::isClass()
 
 
 #if SUPPORT_TAGGED_POINTERS
+/**
+ Tagged Pointer对象中是不可能保存一个isa的信息的，而是用Tagged Pointer类型的对象中的某些bit位来保存所属的类信息的索引值。系统分别定义了两个全局数组变量：
+    extern "C" {
+     extern Class objc_debug_taggedpointer_classes[16*2];
+     extern Class objc_debug_taggedpointer_ext_classes[256];
+ }
+ 来保存所有的Tagged Pointer类型的类信息。
 
+ */
 inline Class 
 objc_object::getIsa() 
 {
     if (!isTaggedPointer()) return ISA();
 
     uintptr_t ptr = (uintptr_t)this;
-    if (isExtTaggedPointer()) {
+    if (isExtTaggedPointer()) {//自定义扩展Tagged Pointer类型
         uintptr_t slot = 
             (ptr >> _OBJC_TAG_EXT_SLOT_SHIFT) & _OBJC_TAG_EXT_SLOT_MASK;
         return objc_tag_ext_classes[slot];
-    } else {
+    } else {//内置Tagged Pointer类型的
         uintptr_t slot = 
             (ptr >> _OBJC_TAG_SLOT_SHIFT) & _OBJC_TAG_SLOT_MASK;
         return objc_tag_classes[slot];
@@ -147,13 +155,14 @@ objc_object::isExtTaggedPointer()
 
 
 #if SUPPORT_NONPOINTER_ISA
-
+//来保存所有的非Tagged Pointer对象
 inline Class 
 objc_object::ISA() 
 {
     assert(!isTaggedPointer()); 
 #if SUPPORT_INDEXED_ISA
-    if (isa.nonpointer) {
+    if (isa.nonpointer) {//0 表示 isa_t 没有开启指针优化，不使用 isa_t 中定义的结构体。访问 objc_object 的 isa 会直接返回 isa_t 结构中的 cls 变量，cls 变量会指向对象所属的类的结构 1 表示 isa_t 开启了指针优化，不能直接访问 objc_object 的 isa 成员变量 (因为 isa 已经不是一个合法的内存指针了 此时 isa 中包含了类信息、对象的引用计数等信息
+
         uintptr_t slot = isa.indexcls;
         return classForIndex((unsigned)slot);
     }

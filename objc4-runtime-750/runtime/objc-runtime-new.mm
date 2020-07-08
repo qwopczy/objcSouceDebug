@@ -4959,15 +4959,52 @@ log_and_fill_cache(Class cls, IMP imp, SEL sel, id receiver, Class implementer)
     cache_fill (cls, sel, imp, receiver);
 }
 
+/*
+
+objc_msgSend的C语言版本伪代码实现.
+receiver: 是调用方法的对象
+op: 是要调用的方法名称字符串
+ objc_msgSend函数的实现逻辑主要分为4个部分：
+ 1. 对象空值判断
+ 2. 获取或者构造对象的isa数据
+ 3. 遍历缓存哈希桶并查找缓存中的方法实现
+ 4. 执行方法实现或方法未命中缓存处理函数
+ 
+ 以下是汇编实现
+ id  objc_msgSend(id receiver, SEL op, ...)
+ {
+  //4............................ 执行方法实现或方法未命中缓存处理函数
+     if (imp != NULL)
+          return imp(receiver, op,  ...); //这里的... 是指传递给objc_msgSend的OC方法中的参数。
+     else
+          return objc_msgSend_uncached(receiver, op, cls, ...);
+
+ 
+ }
+
+   方法未命中缓存处理函数：objc_msgSend_uncached的C语言版本伪代码实现，这个函数也是用汇编语言编写。
+
+ id objc_msgSend_uncached(id receiver, SEL op, struct objc_class *cls)
+ {
+    //这个函数很简单就是直接调用了_class_lookupMethodAndLoadCache3 来查找方法并缓存到struct objc_class中的cache中，最后再返回IMP类型。
+   IMP  imp =   _class_lookupMethodAndLoadCache3(receiver, op, cls);
+   return imp(receiver, op, ....);
+ }
+
+*/
 
 /***********************************************************************
 * _class_lookupMethodAndLoadCache.
 * Method lookup for dispatchers ONLY. OTHER CODE SHOULD USE lookUpImp().
 * This lookup avoids optimistic cache scan because the dispatcher 
 * already tried that.
+ 
+ 
 **********************************************************************/
 IMP _class_lookupMethodAndLoadCache3(id obj, SEL sel, Class cls)
 {
+    //这个函数很简单就是直接调用了_class_lookupMethodAndLoadCache3 来查找方法并缓存到struct objc_class中的cache中，最后再返回IMP类型。
+
     return lookUpImpOrForward(cls, sel, obj, 
                               YES/*initialize*/, NO/*cache*/, YES/*resolver*/);
 }
@@ -6923,14 +6960,14 @@ unsigned  objc_debug_taggedpointer_slot_shift = 0;
 uintptr_t objc_debug_taggedpointer_slot_mask = 0;
 unsigned  objc_debug_taggedpointer_payload_lshift = 0;
 unsigned  objc_debug_taggedpointer_payload_rshift = 0;
-Class objc_debug_taggedpointer_classes[1] = { nil };
+Class objc_debug_taggedpointer_classes[1] = { nil };//对于内置Tagged Pointer类型的对象来说，其中的高四位保存的是一个索引值，通过这个索引值可以在objc_debug_taggedpointer_classes数组中查找到对象所属的Class对象；
 
 uintptr_t objc_debug_taggedpointer_ext_mask = 0;
 unsigned  objc_debug_taggedpointer_ext_slot_shift = 0;
 uintptr_t objc_debug_taggedpointer_ext_slot_mask = 0;
 unsigned  objc_debug_taggedpointer_ext_payload_lshift = 0;
 unsigned  objc_debug_taggedpointer_ext_payload_rshift = 0;
-Class objc_debug_taggedpointer_ext_classes[1] = { nil };
+Class objc_debug_taggedpointer_ext_classes[1] = { nil };//对于自定义扩展Tagged Pointer类型的对象来说，其中的高52位到59位这8位bit保存的是一个索引值，通过这个索引值可以在objc_debug_taggedpointer_ext_classes数组中查找到对象所属的Class对象。
 
 static void
 disableTaggedPointers() { }

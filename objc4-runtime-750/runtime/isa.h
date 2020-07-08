@@ -76,7 +76,7 @@
 #   define ISA_MAGIC_MASK  0x001f800000000001ULL
 #   define ISA_MAGIC_VALUE 0x001d800000000001ULL
 #   define ISA_BITFIELD                                                        \
-      uintptr_t nonpointer        : 1;  /* 是32位还是64位 0 表示普通的 isa 指针，1 表示使用优化，存储引用计数*/                                       \
+      uintptr_t nonpointer        : 1;  /* 是32位还是64位 0 表示普通的 isa 指针，1 表示使用优化，存储引用计数 是否是非指针类型 isa*/                                       \
       uintptr_t has_assoc         : 1;  /* 对象是否含有或曾经含有关联引用，如果没有关联引用，可以更快的释放对象*/                                       \
       uintptr_t has_cxx_dtor      : 1;  /* 表示该对象是否有 C++ 或 ARC 的析构函数，如果没有，则析构时更快*/                                       \
       uintptr_t shiftcls          : 44; /*MACH_VM_MAX_ADDRESS 0x7fffffe00000 对象指向类的内存地址，也就是isa指向的地址*/ \

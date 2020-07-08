@@ -43,7 +43,7 @@ private:
     cache_key_t _key;
 #else
     cache_key_t _key; //这个key实际上就是方法的SEL，也就是方法名
-    MethodCacheIMP _imp;
+    MethodCacheIMP _imp;  //方法的实现，imp是一个函数指针类型
 #endif
 
 public:
@@ -55,11 +55,13 @@ public:
     void set(cache_key_t newKey, IMP newImp);
 };
 
-
+/*
+   用于加快方法执行的缓存结构体。这个结构体其实就是一个基于开地址冲突解决法的哈希桶。 //方法缓存哈希表
+*/
 struct cache_t {
-    struct bucket_t *_buckets;
-    mask_t _mask;
-    mask_t _occupied;
+    struct bucket_t *_buckets; //缓存方法的哈希桶数组指针，桶的数量 = mask + 1
+    mask_t _mask; //桶的数量 - 1
+    mask_t _occupied; //桶中已经缓存的方法数量。
 
 public:
     struct bucket_t *buckets();

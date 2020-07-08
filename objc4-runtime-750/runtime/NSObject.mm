@@ -486,7 +486,8 @@ objc_initWeakOrNil(id *location, id newObj)
  * This function IS NOT thread-safe with respect to concurrent 
  * modifications to the weak variable. (Concurrent weak clear is safe.)
  * 
- * @param location The weak pointer address. 
+ * @param location The weak pointer address.
+ * 释放附有__weak的变量。具体通过执行objc_storeWeak(&obj1,0)方法，在weak表中查询&obj1这个键，将这个键从weak表中删除。
  */
 void
 objc_destroyWeak(id *location)

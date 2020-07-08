@@ -57,7 +57,11 @@ namespace {
 };
 
 #include "isa.h"
+/**
+ 什么是联合体？
+ 当多个数据需要共享内存或者多个数据每次只取其一时，可以利用联合体(union)，利用union可以用相同的存储空间存储不同型别的数据类型，从而节省内存空间。
 
+ */
 union isa_t {
     isa_t() { }
     isa_t(uintptr_t value) : bits(value) { }
@@ -83,7 +87,9 @@ public:
 
     // getIsa() allows this to be a tagged pointer object
     Class getIsa();
-
+/**
+ 注释：initInstanceIsa(): objects with no custom RR/AWZ：就是说如果自己实现了RR(retain/release)或者AWZ(allocWithZone)的话，就不算nonpointer类型的isa了，否则就都是nonpointer_isa，由系统控制,苹果会尽量使用优化过的isa，
+ */
     // initIsa() should be used to init the isa of new objects only.
     // If this object already has an isa, use changeIsa() for correctness.
     // initInstanceIsa(): objects with no custom RR/AWZ
